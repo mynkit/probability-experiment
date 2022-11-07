@@ -6,9 +6,11 @@ import ResultModal from './ ResultModal';
 
 type Door = 'A'|'B'|'C';
 
+const firstBingo: Door = shuffle(['A', 'B', 'C'])[0]; // 当たりの初期値
+
 const MontyHallProblem: React.FC = () => {
   const doors: Door[] = ['A', 'B', 'C'];
-  const bingo: Door = shuffle(['A', 'B', 'C'])[0];
+  const [bingo, setBingo] = useState(firstBingo);
   const [firstSelectedDoor, setFirstSelectedDoor] = useState<Door|null>(null);
   const [missingDoor, setMissingDoor] = useState<Door|null>(null);
   const [secondSelectedDoor, setSecondSelectedDoor] = useState<Door|null>(null);
@@ -25,6 +27,10 @@ const MontyHallProblem: React.FC = () => {
   const [notChangedBingoCount, setNotChangedBingoCount] = useState(0);
   const [notChangedMissCount, setNotChangedMissCount] = useState(0);
 
+  useEffect(() => {
+    // console.log(`当たり: ${bingo}`);
+  }, [bingo])
+
   const init = () => {
     setFirstSelectedDoor(null);
     setMissingDoor(null);
@@ -36,6 +42,7 @@ const MontyHallProblem: React.FC = () => {
     setImgSrcC('');
     setShowAlertModal(false);
     setShowResultModal(false);
+    setBingo(shuffle(['A', 'B', 'C'])[0]);
   }
 
   const getImgSrc = (door: Door) => {
