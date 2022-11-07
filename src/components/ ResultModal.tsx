@@ -35,16 +35,17 @@ type Props = {
   showResultModal: boolean;
   setShowResultModal: React.Dispatch<React.SetStateAction<boolean>>;
   finalResult: 0|1|null;
+  init: () => void;
 }
 
-const ResultModal: React.FC<Props> = ({ showResultModal, setShowResultModal, finalResult }) => {
+const ResultModal: React.FC<Props> = ({ showResultModal, setShowResultModal, finalResult, init }) => {
   const classes = useStyles();
   return (
     <ReactModal
       isOpen={showResultModal}
       onRequestClose={()=>{
         setShowResultModal(false);
-        window.location.reload();
+        init();
       }}
       className={classes.modal}
       overlayClassName={classes.overlay}
