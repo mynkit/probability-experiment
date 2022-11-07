@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import Grid from '@mui/material/Grid';
 import { shuffle } from '../utils/arrayFunc';
 import AlertModal from './AlertModal';
-import ResultModal from './ ResultModal';
+import ResultModal from './ResultModal';
 
 type Door = 'A'|'B'|'C';
 
@@ -26,6 +26,10 @@ const MontyHallProblem: React.FC = () => {
   const [changedMissCount, setChangedMissCount] = useState(0);
   const [notChangedBingoCount, setNotChangedBingoCount] = useState(0);
   const [notChangedMissCount, setNotChangedMissCount] = useState(0);
+
+  useEffect(() => {
+    document.title = 'モンティホール問題';
+  }, [])
 
   useEffect(() => {
     // console.log(`当たり: ${bingo}`);
