@@ -1,13 +1,22 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
+import MontyHallProblem from './components/MontyHallProblem';
+import Home from './components/Home';
+import {
+  BrowserRouter,
+  Routes,
+  Route
+} from "react-router-dom";
 
-function App() {
+const App: React.FC = () => {
   return (
-    <div className="App">
-      a
-    </div>
-  );
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/montyhall" element={<MontyHallProblem />} />
+      </Routes>
+    </BrowserRouter>
+  )
 }
 
 export default App;
