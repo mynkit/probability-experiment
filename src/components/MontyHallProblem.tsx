@@ -20,6 +20,10 @@ const MontyHallProblem: React.FC = () => {
   const [imgSrcC, setImgSrcC] = useState<string>('');
   const [showAlertModal, setShowAlertModal] = useState(false);
   const [showResultModal, setShowResultModal] = useState(false);
+  const [changedBingoCount, setChangedBingoCount] = useState(0);
+  const [changedMissCount, setChangedMissCount] = useState(0);
+  const [notChangedBingoCount, setNotChangedBingoCount] = useState(0);
+  const [notChangedMissCount, setNotChangedMissCount] = useState(0);
 
   const init = () => {
     setFirstSelectedDoor(null);
@@ -61,6 +65,23 @@ const MontyHallProblem: React.FC = () => {
       setAnnounce(`実は${missingDoor}のドアはハズレです！残りの${doors.filter(door=>door!==missingDoor).join(', ')}から一つ選んでください。`);
     }
   }, [missingDoor, finalMissingDoor, secondSelectedDoor, finalResult])
+
+  useEffect(() => {
+    if (finalResult===1) {
+      if (firstSelectedDoor===secondSelectedDoor) {
+        setNotChangedBingoCount(v => v+1);
+      } else {
+        setChangedBingoCount(v => v+1);
+      }
+    }
+    if (finalResult===0) {
+      if (firstSelectedDoor===secondSelectedDoor) {
+        setNotChangedMissCount(v => v+1);
+      } else {
+        setChangedMissCount(v => v+1);
+      }
+    }
+  }, [finalResult])
 
   return (
     <div style={{padding: '10px'}}>
@@ -141,6 +162,44 @@ const MontyHallProblem: React.FC = () => {
               }
             }
           }}/>
+        </Grid>
+      </Grid>
+      <div style={{paddingTop: '20px'}}/>
+      <Grid container maxWidth='100%' width='700px' alignItems='flex-end' justifyContent='flex-end' style={{textAlign: 'center'}}>
+        <Grid item xs={3}>
+        </Grid>
+        <Grid item xs={3}>
+          <span style={{fontSize: '15pt'}}>当たり</span>
+        </Grid>
+        <Grid item xs={3}>
+          <span style={{fontSize: '15pt'}}>はずれ</span>
+        </Grid>
+        <Grid item xs={3}>
+          <span style={{fontSize: '15pt'}}>勝率(%)</span>
+        </Grid>
+        <Grid item xs={3}>
+          <span style={{fontSize: '15pt'}}>変更有</span>
+        </Grid>
+        <Grid item xs={3}>
+          <span style={{fontSize: '15pt'}}>{changedBingoCount}</span>
+        </Grid>
+        <Grid item xs={3}>
+          <span style={{fontSize: '15pt'}}>{changedMissCount}</span>
+        </Grid>
+        <Grid item xs={3}>
+          <span style={{fontSize: '15pt'}}>{changedBingoCount+changedMissCount>0 ? Math.floor(100*changedBingoCount/(changedBingoCount+changedMissCount)) : ''}</span>
+        </Grid>
+        <Grid item xs={3}>
+          <span style={{fontSize: '15pt'}}>変更無</span>
+        </Grid>
+        <Grid item xs={3}>
+          <span style={{fontSize: '15pt'}}>{notChangedBingoCount}</span>
+        </Grid>
+        <Grid item xs={3}>
+          <span style={{fontSize: '15pt'}}>{notChangedMissCount}</span>
+        </Grid>
+        <Grid item xs={3}>
+          <span style={{fontSize: '15pt'}}>{notChangedBingoCount+notChangedMissCount>0 ? Math.floor(100*notChangedBingoCount/(notChangedBingoCount+notChangedMissCount)) : ''}</span>
         </Grid>
       </Grid>
       <AlertModal showAlertModal={showAlertModal} setShowAlertModal={setShowAlertModal} alertText={`${doors.filter(door=>door!==missingDoor).join(', ')}から選んでください`}/>
