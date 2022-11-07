@@ -21,6 +21,19 @@ const MontyHallProblem: React.FC = () => {
   const [showAlertModal, setShowAlertModal] = useState(false);
   const [showResultModal, setShowResultModal] = useState(false);
 
+  const init = () => {
+    setFirstSelectedDoor(null);
+    setMissingDoor(null);
+    setSecondSelectedDoor(null);
+    setFinalMissingDoor(null);
+    setFinalResult(null);
+    setImgSrcA('');
+    setImgSrcB('');
+    setImgSrcC('');
+    setShowAlertModal(false);
+    setShowResultModal(false);
+  }
+
   const getImgSrc = (door: Door) => {
     if (missingDoor===door || finalMissingDoor===door) {
       return '/doors/door_open.png';
@@ -131,7 +144,7 @@ const MontyHallProblem: React.FC = () => {
         </Grid>
       </Grid>
       <AlertModal showAlertModal={showAlertModal} setShowAlertModal={setShowAlertModal} alertText={`${doors.filter(door=>door!==missingDoor).join(', ')}から選んでください`}/>
-      <ResultModal showResultModal={showResultModal} setShowResultModal={setShowResultModal} finalResult={finalResult}/>
+      <ResultModal showResultModal={showResultModal} setShowResultModal={setShowResultModal} finalResult={finalResult} init={init}/>
     </div>
   )
 }
