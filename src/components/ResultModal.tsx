@@ -52,17 +52,15 @@ const ResultModal: React.FC<Props> = ({ showResultModal, setShowResultModal, fin
       ariaHideApp={false}
     >
       <Grid container justifyContent='center' alignItems='center' style={{textAlign: 'center'}}>
-      {
-        finalResult===1 ? (
-          <div>
+        <div onClick={()=>{init()}}>
+        {
+          finalResult===1 ? (
             <img src='/doors/kuji_ken2_atari.png' width='500px'/>
-          </div>
-        ) : (
-          <div>
+          ) : (
             <img src='/doors/kuji_ken3_hazure.png' width='500px'/>
-          </div>
-        )
-      }
+          )
+        }
+        </div>
       </Grid>
     </ReactModal>
   )
