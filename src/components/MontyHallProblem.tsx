@@ -102,13 +102,16 @@ const MontyHallProblem: React.FC = () => {
       <div style={{padding: '10px'}}/>
       <Grid container maxWidth='100%' width='1000px' alignItems='flex-end' justifyContent='flex-end' style={{textAlign: 'center'}}>
         <Grid item xs={4}>
-          <span style={{fontSize: '20pt'}}>{secondSelectedDoor==='A' ? 'A(二回目の選択)' : firstSelectedDoor==='A' ? 'A(一回目の選択)' : 'A'}</span>
+          <span style={{fontSize: '20pt'}}>A</span>
+          <span style={{fontSize: '11pt'}}>{secondSelectedDoor==='A' ? '(二回目の選択)' : firstSelectedDoor==='A' ? '(一回目の選択)' : ''}</span>
         </Grid>
         <Grid item xs={4}>
-          <span style={{fontSize: '20pt'}}>{secondSelectedDoor==='B' ? 'B(二回目の選択)' : firstSelectedDoor==='B' ? 'B(一回目の選択)' : 'B'}</span>
+          <span style={{fontSize: '20pt'}}>B</span>
+          <span style={{fontSize: '11pt'}}>{secondSelectedDoor==='B' ? '(二回目の選択)' : firstSelectedDoor==='B' ? '(一回目の選択)' : ''}</span>
         </Grid>
         <Grid item xs={4}>
-          <span style={{fontSize: '20pt'}}>{secondSelectedDoor==='C' ? 'C(二回目の選択)' : firstSelectedDoor==='C' ? 'C(一回目の選択)' : 'C'}</span>
+          <span style={{fontSize: '20pt'}}>C</span>
+          <span style={{fontSize: '11pt'}}>{secondSelectedDoor==='C' ? '(二回目の選択)' : firstSelectedDoor==='C' ? '(一回目の選択)' : ''}</span>
         </Grid>
         <Grid item xs={4}>
           <img src={imgSrcA} width='90%' style={{cursor: 'pointer'}} onClick={()=>{
