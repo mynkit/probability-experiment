@@ -55,7 +55,7 @@ const MontyHallProblem: React.FC = () => {
     } else if (secondSelectedDoor!==null && bingo===door && bingo===secondSelectedDoor) {
       return 'doors/present_happy_boy.png';
     } else {
-      return '/doors/door_close.png';
+      return '/doors/door_close_resize.png';
     }
   }
 
