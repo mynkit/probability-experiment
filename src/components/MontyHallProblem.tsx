@@ -96,7 +96,7 @@ const MontyHallProblem: React.FC = () => {
 
   return (
     <div style={{padding: '10px'}}>
-      <h1>Monty Hall Problem</h1>
+      <h1>モンティホール問題</h1>
       <div style={{fontSize: '17pt'}}>次の3つのドアのうち、一つが当たりのドアです。</div>
       <div style={{fontSize: '20pt', textDecoration: 'underline'}}>{announce}</div>
       <div style={{padding: '10px'}}/>
