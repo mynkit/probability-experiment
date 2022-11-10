@@ -180,39 +180,48 @@ const MontyHallProblem: React.FC = () => {
       </Grid>
       <div style={{paddingTop: '20px'}}/>
       <Grid container maxWidth='100%' width='700px' alignItems='flex-end' justifyContent='flex-end' style={{textAlign: 'center'}}>
-        <Grid item xs={3}>
+        <Grid item xs={2.4}>
         </Grid>
-        <Grid item xs={3}>
+        <Grid item xs={2.4}>
           <span style={{fontSize: '15pt'}}>当たり</span>
         </Grid>
-        <Grid item xs={3}>
+        <Grid item xs={2.4}>
           <span style={{fontSize: '15pt'}}>はずれ</span>
         </Grid>
-        <Grid item xs={3}>
+        <Grid item xs={2.4}>
+          <span style={{fontSize: '15pt'}}>合計</span>
+        </Grid>
+        <Grid item xs={2.4}>
           <span style={{fontSize: '15pt'}}>勝率(%)</span>
         </Grid>
-        <Grid item xs={3}>
+        <Grid item xs={2.4}>
           <span style={{fontSize: '15pt'}}>変更有</span>
         </Grid>
-        <Grid item xs={3}>
+        <Grid item xs={2.4}>
           <span style={{fontSize: '15pt'}}>{changedBingoCount}</span>
         </Grid>
-        <Grid item xs={3}>
+        <Grid item xs={2.4}>
           <span style={{fontSize: '15pt'}}>{changedMissCount}</span>
         </Grid>
-        <Grid item xs={3}>
+        <Grid item xs={2.4}>
+          <span style={{fontSize: '15pt'}}>{changedBingoCount+changedMissCount}</span>
+        </Grid>
+        <Grid item xs={2.4}>
           <span style={{fontSize: '15pt'}}>{changedBingoCount+changedMissCount>0 ? Math.floor(100*changedBingoCount/(changedBingoCount+changedMissCount)) : ''}</span>
         </Grid>
-        <Grid item xs={3}>
+        <Grid item xs={2.4}>
           <span style={{fontSize: '15pt'}}>変更無</span>
         </Grid>
-        <Grid item xs={3}>
+        <Grid item xs={2.4}>
           <span style={{fontSize: '15pt'}}>{notChangedBingoCount}</span>
         </Grid>
-        <Grid item xs={3}>
+        <Grid item xs={2.4}>
           <span style={{fontSize: '15pt'}}>{notChangedMissCount}</span>
         </Grid>
-        <Grid item xs={3}>
+        <Grid item xs={2.4}>
+          <span style={{fontSize: '15pt'}}>{notChangedBingoCount+notChangedMissCount}</span>
+        </Grid>
+        <Grid item xs={2.4}>
           <span style={{fontSize: '15pt'}}>{notChangedBingoCount+notChangedMissCount>0 ? Math.floor(100*notChangedBingoCount/(notChangedBingoCount+notChangedMissCount)) : ''}</span>
         </Grid>
       </Grid>
