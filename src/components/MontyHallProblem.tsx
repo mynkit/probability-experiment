@@ -72,7 +72,11 @@ const MontyHallProblem: React.FC = () => {
     if (hiddenCommandCount>=15) {
       setHiddenButton(true);
       if (hiddenCommandCount>=25) {
-        setBakusokuMode(true);
+        if (hiddenCommandCount % 2 === 1) {
+          setBakusokuMode(true);
+        } else {
+          setBakusokuMode(false);
+        }
       }
     } else {
       setHiddenButton(false);
