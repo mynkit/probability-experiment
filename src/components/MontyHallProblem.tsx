@@ -33,6 +33,8 @@ const MontyHallProblem: React.FC = () => {
   const [timeId, setTimeId] = useState<NodeJS.Timer|null>(null);
   const [hiddenCommandCount, setHiddenCommandCount] = useState(0);
   const [hiddenButton, setHiddenButton] = useState(false);
+  const [clickInterval, setClickInterval] = useState(100); // 単位はミリ秒
+  const [bakusokuMode, setBakusokuMode] = useState(false);
 
   useEffect(() => {
     document.title = 'モンティホール問題';
@@ -69,10 +71,21 @@ const MontyHallProblem: React.FC = () => {
   useEffect(() => {
     if (hiddenCommandCount>=15) {
       setHiddenButton(true);
+      if (hiddenCommandCount>=25) {
+        setBakusokuMode(true);
+      }
     } else {
       setHiddenButton(false);
     }
   }, [hiddenCommandCount])
+
+  useEffect(() => {
+    if (bakusokuMode) {
+      setClickInterval(10);
+    } else {
+      setClickInterval(100);
+    }
+  }, [bakusokuMode])
 
   useEffect(() => {
     if (firstSelectedDoor!==null) {
@@ -118,7 +131,7 @@ const MontyHallProblem: React.FC = () => {
           let targetDoor = shuffle(['A', 'B', 'C'])[0];
           (document.getElementById(`img${targetDoor}`) as HTMLElement).click();
         }
-      }, 100);
+      }, clickInterval);
       setTimeId(timerId_)
     } else {
       if (timeId!==null) clearInterval(timeId);
@@ -132,7 +145,7 @@ const MontyHallProblem: React.FC = () => {
         <div style={{fontSize: '17pt'}}>次の3つのドアのうち、一つが当たりのドアです。</div>
         {hiddenButton ? (
           <Button style={{zIndex: 100}} color={autoMode ? "primary" : "inherit"} variant="outlined" startIcon={autoMode ? <PlayDisabledIcon/> : <PlayArrowIcon />} onClick={()=>{setAutoMode(v=>!v)}} disabled={false} size="medium">
-            {autoMode ? '自動停止' : '自動実行'}
+            {autoMode ? '自動停止' : `自動実行${bakusokuMode ? '(爆速)' : ''}`}
           </Button>
         ): <></>}
       </Grid>
