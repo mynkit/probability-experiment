@@ -6,7 +6,23 @@ import ResultModal from './ResultModal';
 import Button from '@mui/material/Button';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import PlayDisabledIcon from '@mui/icons-material/PlayDisabled';
-import { rgbToHex } from '@mui/material';
+import SendIcon from '@mui/icons-material/Send';
+import { storage } from "../firebase";
+
+const zeroPadding = (num: number, length: number) => {
+  return (Array(length).join('0') + num).slice(-length);
+}
+
+const getNowTime = () => {
+  let dt = new Date();
+  let year = dt.getFullYear();
+  let month = dt.getMonth()+1;
+  let date = dt.getDate();
+  let hour = dt.getHours();
+  let min = dt.getMinutes();
+  let sec = dt.getSeconds();
+  return `${zeroPadding(year, 4)}${zeroPadding(month, 2)}${zeroPadding(date, 2)}${zeroPadding(hour, 2)}${zeroPadding(min, 2)}${zeroPadding(sec, 2)}`
+}
 
 type Door = 'A'|'B'|'C';
 
@@ -25,6 +41,7 @@ const MontyHallProblem: React.FC = () => {
   const [imgSrcB, setImgSrcB] = useState<string>('');
   const [imgSrcC, setImgSrcC] = useState<string>('');
   const [showAlertModal, setShowAlertModal] = useState(false);
+  const [showSubmitAlertModal, setShowSubmitAlertModal] = useState(false);
   const [showResultModal, setShowResultModal] = useState(false);
   const [changedBingoCount, setChangedBingoCount] = useState(Number(localStorage.getItem('changedBingoCount')) || 0);
   const [changedMissCount, setChangedMissCount] = useState(Number(localStorage.getItem('changedMissCount')) || 0);
@@ -287,7 +304,37 @@ const MontyHallProblem: React.FC = () => {
           <span style={{fontSize: '15pt'}}>{notChangedBingoCount+notChangedMissCount>0 ? Math.floor(100*notChangedBingoCount/(notChangedBingoCount+notChangedMissCount)) : ''}</span>
         </Grid>
       </Grid>
+      <div style={{paddingTop: '20px'}}/>
+      <Button style={{zIndex: 100}} color={"inherit"} variant="outlined" startIcon={<SendIcon />} onClick={async ()=>{
+        const S =
+        "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+        const N = 4;
+        const randomChar = Array.from(crypto.getRandomValues(new Uint32Array(N)))
+          .map((n) => S[n % S.length])
+          .join("");
+        const fileName = `${getNowTime()}_${randomChar}.json`;
+        console.log(fileName)
+        // 送信処理
+        const json = {
+          changedBingoCount: changedBingoCount,
+          changedMissCount: changedMissCount,
+          notChangedBingoCount: notChangedBingoCount,
+          notChangedMissCount: notChangedMissCount,
+        }
+        let jsonString = JSON.stringify(json);
+        let blob = new Blob([jsonString], {type: "application/json"})
+        await storage.ref(`jsons/${fileName}`).put(blob).then((res) => {
+          if (res) {
+            setShowSubmitAlertModal(true);
+          }
+        }).catch((e) => {
+          console.log(e);
+        });
+      }} disabled={false} size="medium">
+        {`結果を送信`}
+      </Button>
       <AlertModal showAlertModal={showAlertModal} setShowAlertModal={setShowAlertModal} alertText={`${doors.filter(door=>door!==missingDoor).join(', ')}から選んでください`}/>
+      <AlertModal showAlertModal={showSubmitAlertModal} setShowAlertModal={setShowSubmitAlertModal} alertText={`送信完了しました`}/>
       <ResultModal showResultModal={showResultModal} setShowResultModal={setShowResultModal} finalResult={finalResult} init={init}/>
     </div>
   )
