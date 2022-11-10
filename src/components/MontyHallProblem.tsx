@@ -3,6 +3,9 @@ import Grid from '@mui/material/Grid';
 import { shuffle } from '../utils/arrayFunc';
 import AlertModal from './AlertModal';
 import ResultModal from './ResultModal';
+import Button from '@mui/material/Button';
+import PlayArrowIcon from '@mui/icons-material/PlayArrow';
+import PlayDisabledIcon from '@mui/icons-material/PlayDisabled';
 
 type Door = 'A'|'B'|'C';
 
@@ -26,6 +29,10 @@ const MontyHallProblem: React.FC = () => {
   const [changedMissCount, setChangedMissCount] = useState(0);
   const [notChangedBingoCount, setNotChangedBingoCount] = useState(0);
   const [notChangedMissCount, setNotChangedMissCount] = useState(0);
+  const [autoMode, setAutoMode] = useState(false);
+  const [timeId, setTimeId] = useState<NodeJS.Timer|null>(null);
+  const [hiddenCommandCount, setHiddenCommandCount] = useState(0);
+  const [hiddenButton, setHiddenButton] = useState(false);
 
   useEffect(() => {
     document.title = 'モンティホール問題';
@@ -58,6 +65,14 @@ const MontyHallProblem: React.FC = () => {
       return '/doors/door_close_resize.png';
     }
   }
+
+  useEffect(() => {
+    if (hiddenCommandCount>=15) {
+      setHiddenButton(true);
+    } else {
+      setHiddenButton(false);
+    }
+  }, [hiddenCommandCount])
 
   useEffect(() => {
     if (firstSelectedDoor!==null) {
@@ -94,12 +109,37 @@ const MontyHallProblem: React.FC = () => {
     }
   }, [finalResult])
 
+  useEffect(() => {
+    if (autoMode) {
+      let timerId_ = setInterval(()=>{
+        if (document.getElementById(`resultmodal`)) {
+          (document.getElementById(`resultmodal`) as HTMLElement).click();
+        } else {
+          let targetDoor = shuffle(['A', 'B', 'C'])[0];
+          (document.getElementById(`img${targetDoor}`) as HTMLElement).click();
+        }
+      }, 100);
+      setTimeId(timerId_)
+    } else {
+      if (timeId!==null) clearInterval(timeId);
+    }
+  }, [autoMode])
+
   return (
     <div style={{padding: '10px'}}>
-      <h1>モンティホール問題</h1>
-      <div style={{fontSize: '17pt'}}>次の3つのドアのうち、一つが当たりのドアです。</div>
-      <div style={{fontSize: '20pt', textDecoration: 'underline'}}>{announce}</div>
-      <div style={{padding: '10px'}}/>
+      <h1 onClick={()=>setHiddenCommandCount(v=>v+1)}>モンティホール問題</h1>
+      <Grid container>
+        <div style={{fontSize: '17pt'}}>次の3つのドアのうち、一つが当たりのドアです。</div>
+        {hiddenButton ? (
+          <Button style={{zIndex: 100}} color={autoMode ? "primary" : "inherit"} variant="outlined" startIcon={autoMode ? <PlayDisabledIcon/> : <PlayArrowIcon />} onClick={()=>{setAutoMode(v=>!v)}} disabled={false} size="medium">
+            {autoMode ? '自動停止' : '自動実行'}
+          </Button>
+        ): <></>}
+      </Grid>
+      <span style={{fontSize: '20pt', textDecoration: 'underline', paddingRight: '10px'}}>
+          {announce}
+        </span>
+      <div style={{padding: '5px'}}/>
       <Grid container maxWidth='100%' width='1000px' alignItems='flex-end' justifyContent='flex-end' style={{textAlign: 'center'}}>
         <Grid item xs={4}>
           <span style={{fontSize: '20pt'}}>A</span>
@@ -114,7 +154,7 @@ const MontyHallProblem: React.FC = () => {
           <span style={{fontSize: '11pt'}}>{secondSelectedDoor==='C' ? '(二回目の選択)' : firstSelectedDoor==='C' ? '(一回目の選択)' : ''}</span>
         </Grid>
         <Grid item xs={4}>
-          <img src={imgSrcA} width='90%' style={{cursor: 'pointer'}} onClick={()=>{
+          <img id='imgA' src={imgSrcA} width='90%' style={{cursor: 'pointer'}} onClick={()=>{
             if (firstSelectedDoor===null) {
               setFirstSelectedDoor('A');
             } else {
@@ -135,7 +175,7 @@ const MontyHallProblem: React.FC = () => {
           }}/>
         </Grid>
         <Grid item xs={4}>
-          <img src={imgSrcB} width='90%' style={{cursor: 'pointer'}} onClick={()=>{
+          <img id='imgB' src={imgSrcB} width='90%' style={{cursor: 'pointer'}} onClick={()=>{
             if (firstSelectedDoor===null) {
               setFirstSelectedDoor('B');
             } else {
@@ -156,7 +196,7 @@ const MontyHallProblem: React.FC = () => {
           }}/>
         </Grid>
         <Grid item xs={4}>
-          <img src={imgSrcC} width='90%' style={{cursor: 'pointer'}} onClick={()=>{
+          <img id='imgC' src={imgSrcC} width='90%' style={{cursor: 'pointer'}} onClick={()=>{
             if (firstSelectedDoor===null) {
               setFirstSelectedDoor('C');
             } else {

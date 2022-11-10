@@ -55,9 +55,9 @@ const ResultModal: React.FC<Props> = ({ showResultModal, setShowResultModal, fin
         <div onClick={()=>{init()}}>
         {
           finalResult===1 ? (
-            <img src='/doors/kuji_ken2_atari.png' width='500px' style={{opacity: 0.7}}/>
+            <img id='resultmodal' src='/doors/kuji_ken2_atari.png' width='500px' style={{opacity: 0.7}}/>
           ) : (
-            <img src='/doors/kuji_ken3_hazure.png' width='500px' style={{opacity: 0.7}}/>
+            <img id='resultmodal' src='/doors/kuji_ken3_hazure.png' width='500px' style={{opacity: 0.7}}/>
           )
         }
         </div>
