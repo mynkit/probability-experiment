@@ -6,6 +6,7 @@ import ResultModal from './ResultModal';
 import Button from '@mui/material/Button';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import PlayDisabledIcon from '@mui/icons-material/PlayDisabled';
+import { rgbToHex } from '@mui/material';
 
 type Door = 'A'|'B'|'C';
 
@@ -144,7 +145,7 @@ const MontyHallProblem: React.FC = () => {
 
   return (
     <div style={{padding: '10px'}}>
-      <h1 onClick={()=>setHiddenCommandCount(v=>v+1)}>モンティホール問題</h1>
+      <h1 onClick={()=>setHiddenCommandCount(v=>v+1)} style={{backgroundColor: `rgb(${0},${0},${0},${Math.min(hiddenCommandCount/100., 0.1)})`}}>モンティホール問題</h1>
       <Grid container>
         <div style={{fontSize: '17pt'}}>次の3つのドアのうち、一つが当たりのドアです。</div>
         {hiddenButton ? (
