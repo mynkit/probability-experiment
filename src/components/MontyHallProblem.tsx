@@ -26,10 +26,10 @@ const MontyHallProblem: React.FC = () => {
   const [imgSrcC, setImgSrcC] = useState<string>('');
   const [showAlertModal, setShowAlertModal] = useState(false);
   const [showResultModal, setShowResultModal] = useState(false);
-  const [changedBingoCount, setChangedBingoCount] = useState(0);
-  const [changedMissCount, setChangedMissCount] = useState(0);
-  const [notChangedBingoCount, setNotChangedBingoCount] = useState(0);
-  const [notChangedMissCount, setNotChangedMissCount] = useState(0);
+  const [changedBingoCount, setChangedBingoCount] = useState(Number(localStorage.getItem('changedBingoCount')) || 0);
+  const [changedMissCount, setChangedMissCount] = useState(Number(localStorage.getItem('changedMissCount')) || 0);
+  const [notChangedBingoCount, setNotChangedBingoCount] = useState(Number(localStorage.getItem('notChangedBingoCount')) || 0);
+  const [notChangedMissCount, setNotChangedMissCount] = useState(Number(localStorage.getItem('notChangedMissCount')) || 0);
   const [autoMode, setAutoMode] = useState(false);
   const [timeId, setTimeId] = useState<NodeJS.Timer|null>(null);
   const [hiddenCommandCount, setHiddenCommandCount] = useState(0);
@@ -113,15 +113,19 @@ const MontyHallProblem: React.FC = () => {
   useEffect(() => {
     if (finalResult===1) {
       if (firstSelectedDoor===secondSelectedDoor) {
+        localStorage.setItem('notChangedBingoCount', String(notChangedBingoCount+1));
         setNotChangedBingoCount(v => v+1);
       } else {
+        localStorage.setItem('changedBingoCount', String(changedBingoCount+1));
         setChangedBingoCount(v => v+1);
       }
     }
     if (finalResult===0) {
       if (firstSelectedDoor===secondSelectedDoor) {
+        localStorage.setItem('notChangedMissCount', String(notChangedMissCount+1));
         setNotChangedMissCount(v => v+1);
       } else {
+        localStorage.setItem('changedMissCount', String(changedMissCount+1));
         setChangedMissCount(v => v+1);
       }
     }
