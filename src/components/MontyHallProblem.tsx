@@ -53,6 +53,7 @@ const MontyHallProblem: React.FC = () => {
   const [hiddenButton, setHiddenButton] = useState(false);
   const [clickInterval, setClickInterval] = useState(100); // 単位はミリ秒
   const [bakusokuMode, setBakusokuMode] = useState(false);
+  const [lastSubmitTime, setLastSubmitTime] = useState(Number(localStorage.getItem('lastSubmitTime')) || 0);
 
   useEffect(() => {
     document.title = 'モンティホール問題';
@@ -326,11 +327,13 @@ const MontyHallProblem: React.FC = () => {
         await storage.ref(`jsons/${fileName}`).put(blob).then((res) => {
           if (res) {
             setShowSubmitAlertModal(true);
+            localStorage.setItem('lastSubmitTime', String(Math.floor((new Date()).getTime() / 1000)));
+            setLastSubmitTime(Math.floor((new Date()).getTime() / 1000));
           }
         }).catch((e) => {
           console.log(e);
         });
-      }} disabled={false} size="medium">
+      }} disabled={Math.floor((new Date()).getTime() / 1000) <= lastSubmitTime + 600} size="medium">
         {`結果を送信`}
       </Button>
       <AlertModal showAlertModal={showAlertModal} setShowAlertModal={setShowAlertModal} alertText={`${doors.filter(door=>door!==missingDoor).join(', ')}から選んでください`}/>
