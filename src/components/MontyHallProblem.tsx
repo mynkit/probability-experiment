@@ -267,7 +267,7 @@ const MontyHallProblem: React.FC = () => {
           <Button style={{fontSize: '10pt', paddingLeft: '5px', paddingRight: '5px', paddingTop: '2px', paddingBottom: '2px'}} color={"inherit"} variant="outlined" startIcon={<CachedIcon />} onClick={()=>{
             setShowInitModal(true);
           }}>
-            初期状態
+            初期化
           </Button>
         </Grid>
         <Grid item xs={2.4}>
