@@ -137,7 +137,7 @@ const InitModal: React.FC<Props> = ({ showInitModal, setShowInitModal, setNotCha
               初期化しますか？
             </Typography>
             <Typography variant="subtitle1" color="textSecondary">
-              <br/>localStorageを削除し、0に戻します
+              <br/>すべての回数を0に戻します
             </Typography>
             <Grid
               container
