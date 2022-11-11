@@ -156,7 +156,7 @@ const MontyHallProblem: React.FC = () => {
         <div style={{fontSize: '17pt'}}>次の3つのドアのうち、一つが当たりのドアです。</div>
         {hiddenButton ? (
           <Button style={{zIndex: 100}} color={autoMode ? "primary" : "inherit"} variant="outlined" startIcon={autoMode ? <PlayDisabledIcon/> : <PlayArrowIcon />} onClick={()=>{setAutoMode(v=>!v)}} disabled={false} size="medium">
-            {autoMode ? '自動停止' : `自動実行${bakusokuMode ? '(爆速)' : ''}`}
+            {autoMode ? '実行停止' : `自動実行${bakusokuMode ? '(爆速)' : ''}`}
           </Button>
         ): <></>}
       </Grid>
