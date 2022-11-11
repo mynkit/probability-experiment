@@ -3,11 +3,13 @@ import Grid from '@mui/material/Grid';
 import { shuffle } from '../utils/arrayFunc';
 import AlertModal from './AlertModal';
 import ResultModal from './ResultModal';
+import InitModal from './InitModal';
 import Button from '@mui/material/Button';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import PlayDisabledIcon from '@mui/icons-material/PlayDisabled';
 import SendIcon from '@mui/icons-material/Send';
 import { storage } from "../firebase";
+import CachedIcon from '@mui/icons-material/Cached';
 
 const zeroPadding = (num: number, length: number) => {
   return (Array(length).join('0') + num).slice(-length);
@@ -43,6 +45,7 @@ const MontyHallProblem: React.FC = () => {
   const [showAlertModal, setShowAlertModal] = useState(false);
   const [showSubmitAlertModal, setShowSubmitAlertModal] = useState(false);
   const [showResultModal, setShowResultModal] = useState(false);
+  const [showInitModal, setShowInitModal] = useState(false);
   const [changedBingoCount, setChangedBingoCount] = useState(Number(localStorage.getItem('changedBingoCount')) || 0);
   const [changedMissCount, setChangedMissCount] = useState(Number(localStorage.getItem('changedMissCount')) || 0);
   const [notChangedBingoCount, setNotChangedBingoCount] = useState(Number(localStorage.getItem('notChangedBingoCount')) || 0);
@@ -261,6 +264,11 @@ const MontyHallProblem: React.FC = () => {
       <div style={{paddingTop: '20px'}}/>
       <Grid container maxWidth='100%' width='700px' alignItems='flex-end' justifyContent='flex-end' style={{textAlign: 'center'}}>
         <Grid item xs={2.4}>
+          <Button style={{fontSize: '10pt', paddingLeft: '5px', paddingRight: '5px', paddingTop: '2px', paddingBottom: '2px'}} color={"inherit"} variant="outlined" startIcon={<CachedIcon />} onClick={()=>{
+            setShowInitModal(true);
+          }}>
+            初期状態
+          </Button>
         </Grid>
         <Grid item xs={2.4}>
           <span style={{fontSize: '15pt'}}>当たり</span>
@@ -339,6 +347,14 @@ const MontyHallProblem: React.FC = () => {
       <AlertModal showAlertModal={showAlertModal} setShowAlertModal={setShowAlertModal} alertText={`${doors.filter(door=>door!==missingDoor).join(', ')}から選んでください`}/>
       <AlertModal showAlertModal={showSubmitAlertModal} setShowAlertModal={setShowSubmitAlertModal} alertText={`送信完了しました`}/>
       <ResultModal showResultModal={showResultModal} setShowResultModal={setShowResultModal} finalResult={finalResult} init={init}/>
+      <InitModal
+        showInitModal={showInitModal}
+        setShowInitModal={setShowInitModal}
+        setNotChangedBingoCount={setNotChangedBingoCount}
+        setChangedBingoCount={setChangedBingoCount}
+        setNotChangedMissCount={setNotChangedMissCount}
+        setChangedMissCount={setChangedMissCount}
+      />
     </div>
   )
 }
