@@ -8,23 +8,78 @@ import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import PlayDisabledIcon from '@mui/icons-material/PlayDisabled';
 import InitModal from './InitModal';
 import CachedIcon from '@mui/icons-material/Cached';
+import AddIcon from '@mui/icons-material/Add';
+import RemoveIcon from '@mui/icons-material/Remove';
 
-type Door = 'A'|'B'|'C';
+type Door = 'A'|'B'|'C'|'D'|'E'|'F'|'G'|'H'|'I'|'J'|'K'|'L'|'M'|'N'|'O'|'P'|'Q'|'R'|'S'|'T'|'U'|'V'|'X'|'Y'|'Z';
+
+const doorList: Door[] = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'X', 'Y', 'Z'];
+
+type DoorImgProps = {
+  door: Door;
+  firstSelectedDoor: Door | null;
+  setFirstSelectedDoor: React.Dispatch<React.SetStateAction<Door | null>>;
+  missingDoors: Door[];
+  setShowAlertModal: React.Dispatch<React.SetStateAction<boolean>>;
+  bingo: Door;
+  finalMissingDoor: Door | null;
+  setFinalMissingDoor: React.Dispatch<React.SetStateAction<Door | null>>;
+  secondSelectedDoor: Door | null;
+  setSecondSelectedDoor: React.Dispatch<React.SetStateAction<Door | null>>;
+  finalResult: 0 | 1 | null;
+  setFinalResult: React.Dispatch<React.SetStateAction<0 | 1 | null>>;
+  setShowResultModal: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+const DoorImg: React.FC<DoorImgProps> = ({ door, firstSelectedDoor, setFirstSelectedDoor, missingDoors, setShowAlertModal, bingo, finalMissingDoor, setFinalMissingDoor, secondSelectedDoor, setSecondSelectedDoor, finalResult, setFinalResult, setShowResultModal }) => {
+  const [imgSrc, setImgSrc] = useState('')
+  useEffect(() => {
+    if (finalResult!==null) {
+      setImgSrc('/doors/door_close_resize.png');
+    }
+    if (missingDoors.includes(door) || finalMissingDoor===door) {
+      setImgSrc('/doors/door_open.png');
+    } else if (secondSelectedDoor!==null && bingo===door && bingo===secondSelectedDoor) {
+      setImgSrc('doors/present_happy_boy.png');
+    } else {
+      setImgSrc('/doors/door_close_resize.png');
+    }
+  }, [missingDoors, finalMissingDoor, secondSelectedDoor, finalResult])
+  return (
+    <img id={`img${door}`} src={imgSrc} width='90%' style={{cursor: 'pointer'}} onClick={()=>{
+      if (firstSelectedDoor===null) {
+        setFirstSelectedDoor(door);
+      } else {
+        if (missingDoors.includes(door)) {
+          setShowAlertModal(true);
+        } else if (bingo!==door) {
+          setFinalMissingDoor(door);
+          setSecondSelectedDoor(door);
+          setFinalResult(0);
+          setShowResultModal(true);
+        } else {
+          // あたり
+          setSecondSelectedDoor(door);
+          setFinalResult(1);
+          setShowResultModal(true);
+        }
+      }
+    }}/>
+  )
+}
 
 const firstBingo: Door = shuffle(['A', 'B', 'C'])[0]; // 当たりの初期値
 
 const MontyHallProblem: React.FC = () => {
-  const doors: Door[] = ['A', 'B', 'C'];
+  const [doorCount, setDoorCount] = useState(3);
+  const [doors, setDoors] = useState<Door[]>(doorList.slice(0, doorCount));
   const [bingo, setBingo] = useState(firstBingo);
   const [firstSelectedDoor, setFirstSelectedDoor] = useState<Door|null>(null);
-  const [missingDoor, setMissingDoor] = useState<Door|null>(null);
+  const [missingDoors, setMissingDoors] = useState<Door[]>([]);
   const [secondSelectedDoor, setSecondSelectedDoor] = useState<Door|null>(null);
   const [finalMissingDoor, setFinalMissingDoor] = useState<Door|null>(null);
   const [finalResult, setFinalResult] = useState<1|0|null>(null);
   const [announce, setAnnounce] = useState('');
-  const [imgSrcA, setImgSrcA] = useState<string>('');
-  const [imgSrcB, setImgSrcB] = useState<string>('');
-  const [imgSrcC, setImgSrcC] = useState<string>('');
   const [showAlertModal, setShowAlertModal] = useState(false);
   const [showResultModal, setShowResultModal] = useState(false);
   const [showInitModal, setShowInitModal] = useState(false);
@@ -44,31 +99,39 @@ const MontyHallProblem: React.FC = () => {
   }, [])
 
   useEffect(() => {
+    setDoors(doorList.slice(0, doorCount));
+    init();
+  }, [doorCount])
+
+  useEffect(() => {
+    setBingo(shuffle(doors)[0]);
+  }, [doors])
+
+  useEffect(() => {
     // console.log(`当たり: ${bingo}`);
   }, [bingo])
 
   const init = () => {
     setFirstSelectedDoor(null);
-    setMissingDoor(null);
+    setMissingDoors([]);
     setSecondSelectedDoor(null);
     setFinalMissingDoor(null);
     setFinalResult(null);
-    setImgSrcA('');
-    setImgSrcB('');
-    setImgSrcC('');
     setShowAlertModal(false);
     setShowResultModal(false);
-    setBingo(shuffle(['A', 'B', 'C'])[0]);
+    setBingo(shuffle(doors)[0]);
   }
 
-  const getImgSrc = (door: Door) => {
-    if (missingDoor===door || finalMissingDoor===door) {
-      return '/doors/door_open.png';
-    } else if (secondSelectedDoor!==null && bingo===door && bingo===secondSelectedDoor) {
-      return 'doors/present_happy_boy.png';
-    } else {
-      return '/doors/door_close_resize.png';
-    }
+  const initResult = () => {
+    localStorage.setItem('notChangedBingoCount', '0');
+    localStorage.setItem('changedBingoCount', '0');
+    localStorage.setItem('notChangedMissCount', '0');
+    localStorage.setItem('changedMissCount', '0');
+    setNotChangedBingoCount(0);
+    setChangedBingoCount(0);
+    setNotChangedMissCount(0);
+    setChangedMissCount(0);
+    setShowInitModal(false);
   }
 
   useEffect(() => {
@@ -96,21 +159,17 @@ const MontyHallProblem: React.FC = () => {
 
   useEffect(() => {
     if (firstSelectedDoor!==null) {
-      setMissingDoor(shuffle(doors.filter(door => door!==firstSelectedDoor && door!=bingo))[0]);
+      setMissingDoors(shuffle(doors.filter(door => door!==firstSelectedDoor && door!=bingo)).slice(0, doors.length-2));
     }
   }, [firstSelectedDoor])
 
   useEffect(() => {
-    setImgSrcA(getImgSrc('A'));
-    setImgSrcB(getImgSrc('B'));
-    setImgSrcC(getImgSrc('C'));
-
-    if (missingDoor===null) {
-      setAnnounce('A, B, Cの中から一つのドアを選んでください');
+    if (missingDoors.length===0) {
+      setAnnounce(`${doors.join(', ')}の中から一つのドアを選んでください`);
     } else if (finalResult===null) {
-      setAnnounce(`実は${missingDoor}のドアはハズレです！残りの${doors.filter(door=>door!==missingDoor).join(', ')}から一つ選んでください。`);
+      setAnnounce(`実は${missingDoors.join(', ')}のドアはハズレです！残りの${doors.filter(door=>!missingDoors.includes(door)).join(', ')}から一つ選んでください。`);
     }
-  }, [missingDoor, finalMissingDoor, secondSelectedDoor, finalResult])
+  }, [missingDoors, finalMissingDoor, secondSelectedDoor, finalResult])
 
   useEffect(() => {
     if (finalResult===1) {
@@ -139,7 +198,7 @@ const MontyHallProblem: React.FC = () => {
         if (document.getElementById(`resultmodal`)) {
           (document.getElementById(`resultmodal`) as HTMLElement).click();
         } else {
-          let targetDoor = shuffle(['A', 'B', 'C'])[0];
+          let targetDoor = shuffle(doors)[0];
           (document.getElementById(`img${targetDoor}`) as HTMLElement).click();
         }
       }, clickInterval);
@@ -152,8 +211,28 @@ const MontyHallProblem: React.FC = () => {
   return (
     <div style={{padding: '10px'}}>
       <h1 onClick={()=>setHiddenCommandCount(v=>v+1)} style={{backgroundColor: `rgb(${0},${0},${0},${Math.min(hiddenCommandCount/100., 0.1)})`}}>モンティホール問題</h1>
+      <div style={{paddingTop: '10px'}}/>
+      <Grid container justifyContent='flex-start' alignItems='center'>
+        <Button color={autoMode ? "primary" : "inherit"} variant="outlined" startIcon={<RemoveIcon />} onClick={()=>{
+          if(doorCount>3) {
+            setDoorCount(v=>v-1);
+            initResult();
+          }
+        }} disabled={autoMode} size="medium">
+          ドアを減らす
+        </Button>
+        <Button color={autoMode ? "primary" : "inherit"} variant="outlined" startIcon={<AddIcon />} onClick={()=>{
+          if(doorCount<doorList.length) {
+            setDoorCount(v=>v+1);
+            initResult();
+          }
+        }} disabled={autoMode} size="medium">
+          ドアを増やす
+        </Button>
+      </Grid>
+      <div style={{paddingTop: '10px'}}/>
       <Grid container>
-        <div style={{fontSize: '17pt'}}>次の3つのドアのうち、一つが当たりのドアです。</div>
+        <div style={{fontSize: '17pt'}}>{`次の${doors.length}つのドアのうち、一つが当たりのドアです。`}</div>
         {hiddenButton ? (
           <Button style={{zIndex: 100}} color={autoMode ? "primary" : "inherit"} variant="outlined" startIcon={autoMode ? <PlayDisabledIcon/> : <PlayArrowIcon />} onClick={()=>{setAutoMode(v=>!v)}} disabled={false} size="medium">
             {autoMode ? '実行停止' : `自動実行${bakusokuMode ? '(爆速)' : ''}`}
@@ -165,82 +244,41 @@ const MontyHallProblem: React.FC = () => {
         </span>
       <div style={{padding: '5px'}}/>
       <Grid container maxWidth='100%' width='1000px' alignItems='flex-end' justifyContent='flex-end' style={{textAlign: 'center'}}>
-        <Grid item xs={4}>
-          <span style={{fontSize: '20pt'}}>A</span>
-          <span style={{fontSize: '11pt'}}>{secondSelectedDoor==='A' ? '(二回目の選択)' : firstSelectedDoor==='A' ? '(一回目の選択)' : ''}</span>
-        </Grid>
-        <Grid item xs={4}>
-          <span style={{fontSize: '20pt'}}>B</span>
-          <span style={{fontSize: '11pt'}}>{secondSelectedDoor==='B' ? '(二回目の選択)' : firstSelectedDoor==='B' ? '(一回目の選択)' : ''}</span>
-        </Grid>
-        <Grid item xs={4}>
-          <span style={{fontSize: '20pt'}}>C</span>
-          <span style={{fontSize: '11pt'}}>{secondSelectedDoor==='C' ? '(二回目の選択)' : firstSelectedDoor==='C' ? '(一回目の選択)' : ''}</span>
-        </Grid>
-        <Grid item xs={4}>
-          <img id='imgA' src={imgSrcA} width='90%' style={{cursor: 'pointer'}} onClick={()=>{
-            if (firstSelectedDoor===null) {
-              setFirstSelectedDoor('A');
-            } else {
-              if (missingDoor==='A') {
-                setShowAlertModal(true);
-              } else if (bingo!=='A') {
-                setFinalMissingDoor('A');
-                setSecondSelectedDoor('A');
-                setFinalResult(0);
-                setShowResultModal(true);
-              } else {
-                // あたり
-                setSecondSelectedDoor('A');
-                setFinalResult(1);
-                setShowResultModal(true);
-              }
-            }
-          }}/>
-        </Grid>
-        <Grid item xs={4}>
-          <img id='imgB' src={imgSrcB} width='90%' style={{cursor: 'pointer'}} onClick={()=>{
-            if (firstSelectedDoor===null) {
-              setFirstSelectedDoor('B');
-            } else {
-              if (missingDoor==='B') {
-                setShowAlertModal(true);
-              } else if (bingo!=='B') {
-                setFinalMissingDoor('B');
-                setSecondSelectedDoor('B');
-                setFinalResult(0);
-                setShowResultModal(true);
-              } else {
-                // あたり
-                setSecondSelectedDoor('B');
-                setFinalResult(1);
-                setShowResultModal(true);
-              }
-            }
-          }}/>
-        </Grid>
-        <Grid item xs={4}>
-          <img id='imgC' src={imgSrcC} width='90%' style={{cursor: 'pointer'}} onClick={()=>{
-            if (firstSelectedDoor===null) {
-              setFirstSelectedDoor('C');
-            } else {
-              if (missingDoor==='C') {
-                setShowAlertModal(true);
-              } else if (bingo!=='C') {
-                // はずれ
-                setFinalMissingDoor('C');
-                setSecondSelectedDoor('C');
-                setFinalResult(0);
-                setShowResultModal(true);
-              } else {
-                // あたり
-                setSecondSelectedDoor('C');
-                setFinalResult(1);
-                setShowResultModal(true);
-              }
-            }
-          }}/>
-        </Grid>
+        {doors.map((door) => {
+          return (
+            <Grid key={door} item xs={12./doors.length}>
+              <span style={{
+                fontSize: '20pt',
+                borderBottom: `${firstSelectedDoor===door ? 'dashed' : 'solid'} 2px ${firstSelectedDoor===door ? 'gray' : secondSelectedDoor===door ? 'red' : 'white'}`,
+                borderTop: `${firstSelectedDoor===door ? 'dashed' : 'solid'} 2px ${firstSelectedDoor===door ? 'gray' : secondSelectedDoor===door ? 'red' : 'white'}`,
+                borderLeft: `${firstSelectedDoor===door ? 'dashed' : 'solid'} 2px ${firstSelectedDoor===door ? 'gray' : secondSelectedDoor===door ? 'red' : 'white'}`,
+                borderRight: `${firstSelectedDoor===door ? 'dashed' : 'solid'} 2px ${firstSelectedDoor===door ? 'gray' : secondSelectedDoor===door ? 'red' : 'white'}`,
+                borderRadius: `10px`,
+              }}>{door}</span>
+            </Grid>
+          );
+        })}
+        {doors.map((door) => {
+          return (
+            <Grid key={door} item xs={12./doors.length}>
+              <DoorImg
+                door={door}
+                firstSelectedDoor={firstSelectedDoor}
+                setFirstSelectedDoor={setFirstSelectedDoor}
+                missingDoors={missingDoors}
+                setShowAlertModal={setShowAlertModal}
+                bingo={bingo}
+                finalMissingDoor={finalMissingDoor}
+                setFinalMissingDoor={setFinalMissingDoor}
+                secondSelectedDoor={secondSelectedDoor}
+                setSecondSelectedDoor={setSecondSelectedDoor}
+                finalResult={finalResult}
+                setFinalResult={setFinalResult}
+                setShowResultModal={setShowResultModal}
+              />
+            </Grid>
+          );
+        })}
       </Grid>
       <div style={{paddingTop: '20px'}}/>
       <Grid container maxWidth='100%' width='700px' alignItems='flex-end' justifyContent='flex-end' style={{textAlign: 'center'}}>
@@ -294,15 +332,12 @@ const MontyHallProblem: React.FC = () => {
           <span style={{fontSize: '15pt'}}>{notChangedBingoCount+notChangedMissCount>0 ? Math.floor(100*notChangedBingoCount/(notChangedBingoCount+notChangedMissCount)) : ''}</span>
         </Grid>
       </Grid>
-      <AlertModal showAlertModal={showAlertModal} setShowAlertModal={setShowAlertModal} alertText={`${doors.filter(door=>door!==missingDoor).join(', ')}から選んでください`}/>
+      <AlertModal showAlertModal={showAlertModal} setShowAlertModal={setShowAlertModal} alertText={`${doors.filter(door=>!missingDoors.includes(door)).join(', ')}から選んでください`}/>
       <ResultModal showResultModal={showResultModal} setShowResultModal={setShowResultModal} finalResult={finalResult} init={init}/>
       <InitModal
         showInitModal={showInitModal}
         setShowInitModal={setShowInitModal}
-        setNotChangedBingoCount={setNotChangedBingoCount}
-        setChangedBingoCount={setChangedBingoCount}
-        setNotChangedMissCount={setNotChangedMissCount}
-        setChangedMissCount={setChangedMissCount}
+        initResult={initResult}
       />
     </div>
   )

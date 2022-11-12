@@ -114,13 +114,10 @@ const useStyles = makeStyles((theme) => ({
 type Props = {
   showInitModal: boolean;
   setShowInitModal: React.Dispatch<React.SetStateAction<boolean>>;
-  setNotChangedBingoCount: React.Dispatch<React.SetStateAction<number>>;
-  setChangedBingoCount: React.Dispatch<React.SetStateAction<number>>;
-  setNotChangedMissCount: React.Dispatch<React.SetStateAction<number>>;
-  setChangedMissCount: React.Dispatch<React.SetStateAction<number>>;
+  initResult: () => void;
 }
 
-const InitModal: React.FC<Props> = ({ showInitModal, setShowInitModal, setNotChangedBingoCount, setChangedBingoCount, setNotChangedMissCount, setChangedMissCount }) => {
+const InitModal: React.FC<Props> = ({ showInitModal, setShowInitModal, initResult }) => {
   const classes = useStyles();
   return (
     <div>
@@ -149,17 +146,7 @@ const InitModal: React.FC<Props> = ({ showInitModal, setShowInitModal, setNotCha
               }}>
                 キャンセル
               </div>
-              <div className={classes.signOutButton} onClick={async ()=>{
-                localStorage.setItem('notChangedBingoCount', '0');
-                localStorage.setItem('changedBingoCount', '0');
-                localStorage.setItem('notChangedMissCount', '0');
-                localStorage.setItem('changedMissCount', '0');
-                setNotChangedBingoCount(0);
-                setChangedBingoCount(0);
-                setNotChangedMissCount(0);
-                setChangedMissCount(0);
-                setShowInitModal(false);
-              }}>
+              <div className={classes.signOutButton} onClick={async ()=>{initResult()}}>
                 初期化
               </div>
             </Grid>
