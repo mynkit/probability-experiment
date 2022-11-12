@@ -251,7 +251,7 @@ const MontyHallProblem: React.FC = () => {
           {announce}
         </span>
       <div style={{padding: '5px'}}/>
-      <Grid container maxWidth='100%' width='1000px' alignItems='flex-end' justifyContent='flex-start' style={{textAlign: 'center'}}>
+      <Grid container maxWidth='100%' width='1000px' alignItems='flex-start' justifyContent='flex-start' style={{textAlign: 'center'}}>
         {doors.map((door) => {
           return (
             <Grid key={door} item xs={doors.length <= 12 ? (12. / doors.length) : doors.length > 24 ? 0.9 : 1}>
