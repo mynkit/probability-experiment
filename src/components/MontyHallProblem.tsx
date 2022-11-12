@@ -11,6 +11,59 @@ import CachedIcon from '@mui/icons-material/Cached';
 
 type Door = 'A'|'B'|'C';
 
+type DoorImgProps = {
+  door: Door;
+  firstSelectedDoor: Door | null;
+  setFirstSelectedDoor: React.Dispatch<React.SetStateAction<Door | null>>;
+  missingDoor: Door | null;
+  setShowAlertModal: React.Dispatch<React.SetStateAction<boolean>>;
+  bingo: Door;
+  finalMissingDoor: Door | null;
+  setFinalMissingDoor: React.Dispatch<React.SetStateAction<Door | null>>;
+  secondSelectedDoor: Door | null;
+  setSecondSelectedDoor: React.Dispatch<React.SetStateAction<Door | null>>;
+  finalResult: 0 | 1 | null;
+  setFinalResult: React.Dispatch<React.SetStateAction<0 | 1 | null>>;
+  setShowResultModal: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+const DoorImg: React.FC<DoorImgProps> = ({ door, firstSelectedDoor, setFirstSelectedDoor, missingDoor, setShowAlertModal, bingo, finalMissingDoor, setFinalMissingDoor, secondSelectedDoor, setSecondSelectedDoor, finalResult, setFinalResult, setShowResultModal }) => {
+  const [imgSrc, setImgSrc] = useState('')
+  useEffect(() => {
+    if (finalResult!==null) {
+      setImgSrc('/doors/door_close_resize.png');
+    }
+    if (missingDoor===door || finalMissingDoor===door) {
+      setImgSrc('/doors/door_open.png');
+    } else if (secondSelectedDoor!==null && bingo===door && bingo===secondSelectedDoor) {
+      setImgSrc('doors/present_happy_boy.png');
+    } else {
+      setImgSrc('/doors/door_close_resize.png');
+    }
+  }, [missingDoor, finalMissingDoor, secondSelectedDoor, finalResult])
+  return (
+    <img id={`img${door}`} src={imgSrc} width='90%' style={{cursor: 'pointer'}} onClick={()=>{
+      if (firstSelectedDoor===null) {
+        setFirstSelectedDoor(door);
+      } else {
+        if (missingDoor===door) {
+          setShowAlertModal(true);
+        } else if (bingo!==door) {
+          setFinalMissingDoor(door);
+          setSecondSelectedDoor(door);
+          setFinalResult(0);
+          setShowResultModal(true);
+        } else {
+          // あたり
+          setSecondSelectedDoor(door);
+          setFinalResult(1);
+          setShowResultModal(true);
+        }
+      }
+    }}/>
+  )
+}
+
 const firstBingo: Door = shuffle(['A', 'B', 'C'])[0]; // 当たりの初期値
 
 const MontyHallProblem: React.FC = () => {
@@ -22,9 +75,6 @@ const MontyHallProblem: React.FC = () => {
   const [finalMissingDoor, setFinalMissingDoor] = useState<Door|null>(null);
   const [finalResult, setFinalResult] = useState<1|0|null>(null);
   const [announce, setAnnounce] = useState('');
-  const [imgSrcA, setImgSrcA] = useState<string>('');
-  const [imgSrcB, setImgSrcB] = useState<string>('');
-  const [imgSrcC, setImgSrcC] = useState<string>('');
   const [showAlertModal, setShowAlertModal] = useState(false);
   const [showResultModal, setShowResultModal] = useState(false);
   const [showInitModal, setShowInitModal] = useState(false);
@@ -53,22 +103,9 @@ const MontyHallProblem: React.FC = () => {
     setSecondSelectedDoor(null);
     setFinalMissingDoor(null);
     setFinalResult(null);
-    setImgSrcA('');
-    setImgSrcB('');
-    setImgSrcC('');
     setShowAlertModal(false);
     setShowResultModal(false);
     setBingo(shuffle(['A', 'B', 'C'])[0]);
-  }
-
-  const getImgSrc = (door: Door) => {
-    if (missingDoor===door || finalMissingDoor===door) {
-      return '/doors/door_open.png';
-    } else if (secondSelectedDoor!==null && bingo===door && bingo===secondSelectedDoor) {
-      return 'doors/present_happy_boy.png';
-    } else {
-      return '/doors/door_close_resize.png';
-    }
   }
 
   useEffect(() => {
@@ -101,10 +138,6 @@ const MontyHallProblem: React.FC = () => {
   }, [firstSelectedDoor])
 
   useEffect(() => {
-    setImgSrcA(getImgSrc('A'));
-    setImgSrcB(getImgSrc('B'));
-    setImgSrcC(getImgSrc('C'));
-
     if (missingDoor===null) {
       setAnnounce('A, B, Cの中から一つのドアを選んでください');
     } else if (finalResult===null) {
@@ -178,68 +211,55 @@ const MontyHallProblem: React.FC = () => {
           <span style={{fontSize: '11pt'}}>{secondSelectedDoor==='C' ? '(二回目の選択)' : firstSelectedDoor==='C' ? '(一回目の選択)' : ''}</span>
         </Grid>
         <Grid item xs={4}>
-          <img id='imgA' src={imgSrcA} width='90%' style={{cursor: 'pointer'}} onClick={()=>{
-            if (firstSelectedDoor===null) {
-              setFirstSelectedDoor('A');
-            } else {
-              if (missingDoor==='A') {
-                setShowAlertModal(true);
-              } else if (bingo!=='A') {
-                setFinalMissingDoor('A');
-                setSecondSelectedDoor('A');
-                setFinalResult(0);
-                setShowResultModal(true);
-              } else {
-                // あたり
-                setSecondSelectedDoor('A');
-                setFinalResult(1);
-                setShowResultModal(true);
-              }
-            }
-          }}/>
+          <DoorImg
+            door='A'
+            firstSelectedDoor={firstSelectedDoor}
+            setFirstSelectedDoor={setFirstSelectedDoor}
+            missingDoor={missingDoor}
+            setShowAlertModal={setShowAlertModal}
+            bingo={bingo}
+            finalMissingDoor={finalMissingDoor}
+            setFinalMissingDoor={setFinalMissingDoor}
+            secondSelectedDoor={secondSelectedDoor}
+            setSecondSelectedDoor={setSecondSelectedDoor}
+            finalResult={finalResult}
+            setFinalResult={setFinalResult}
+            setShowResultModal={setShowResultModal}
+          />
         </Grid>
         <Grid item xs={4}>
-          <img id='imgB' src={imgSrcB} width='90%' style={{cursor: 'pointer'}} onClick={()=>{
-            if (firstSelectedDoor===null) {
-              setFirstSelectedDoor('B');
-            } else {
-              if (missingDoor==='B') {
-                setShowAlertModal(true);
-              } else if (bingo!=='B') {
-                setFinalMissingDoor('B');
-                setSecondSelectedDoor('B');
-                setFinalResult(0);
-                setShowResultModal(true);
-              } else {
-                // あたり
-                setSecondSelectedDoor('B');
-                setFinalResult(1);
-                setShowResultModal(true);
-              }
-            }
-          }}/>
+          <DoorImg
+            door='B'
+            firstSelectedDoor={firstSelectedDoor}
+            setFirstSelectedDoor={setFirstSelectedDoor}
+            missingDoor={missingDoor}
+            setShowAlertModal={setShowAlertModal}
+            bingo={bingo}
+            finalMissingDoor={finalMissingDoor}
+            setFinalMissingDoor={setFinalMissingDoor}
+            secondSelectedDoor={secondSelectedDoor}
+            setSecondSelectedDoor={setSecondSelectedDoor}
+            finalResult={finalResult}
+            setFinalResult={setFinalResult}
+            setShowResultModal={setShowResultModal}
+          />
         </Grid>
         <Grid item xs={4}>
-          <img id='imgC' src={imgSrcC} width='90%' style={{cursor: 'pointer'}} onClick={()=>{
-            if (firstSelectedDoor===null) {
-              setFirstSelectedDoor('C');
-            } else {
-              if (missingDoor==='C') {
-                setShowAlertModal(true);
-              } else if (bingo!=='C') {
-                // はずれ
-                setFinalMissingDoor('C');
-                setSecondSelectedDoor('C');
-                setFinalResult(0);
-                setShowResultModal(true);
-              } else {
-                // あたり
-                setSecondSelectedDoor('C');
-                setFinalResult(1);
-                setShowResultModal(true);
-              }
-            }
-          }}/>
+          <DoorImg
+            door='C'
+            firstSelectedDoor={firstSelectedDoor}
+            setFirstSelectedDoor={setFirstSelectedDoor}
+            missingDoor={missingDoor}
+            setShowAlertModal={setShowAlertModal}
+            bingo={bingo}
+            finalMissingDoor={finalMissingDoor}
+            setFinalMissingDoor={setFinalMissingDoor}
+            secondSelectedDoor={secondSelectedDoor}
+            setSecondSelectedDoor={setSecondSelectedDoor}
+            finalResult={finalResult}
+            setFinalResult={setFinalResult}
+            setShowResultModal={setShowResultModal}
+          />
         </Grid>
       </Grid>
       <div style={{paddingTop: '20px'}}/>
