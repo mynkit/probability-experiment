@@ -11,11 +11,11 @@ import CachedIcon from '@mui/icons-material/Cached';
 import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
 
-type Door = 'A'|'B'|'C'|'D'|'E'|'F'|'G'|'H'|'I'|'J'|'K'|'L'|'M'|'N'|'O'|'P'|'Q'|'R'|'S'|'T'|'U'|'V'|'W'|'X'|'Y'|'Z'|'α'|'β'|'γ'|'δ'|'ε'|'ζ'|'η'|'θ'|'ι'|'κ'|'λ'|'μ'|'ν'|'ξ'|'ο'|'π'|'ρ'|'σ'|'τ'|'υ'|'φ'|'χ'|'ψ'|'ω'|'あ'|'い'|'う'|'え'|'お'|'か'|'き'|'く'|'け'|'こ'|'さ'|'し'|'す'|'せ'|'そ'|'た'|'ち'|'つ'|'て'|'と'|'な'|'に'|'ぬ'|'ね'|'の'|'は'|'ひ'|'ふ'|'へ'|'ほ'|'ま'|'み'|'む'|'め'|'も'|'や'|'ゆ'|'よ'|'わ'|'を'|'ん'|'I'|'II'|'III'|'IV'|'V'|'VI'|'VII'|'VIII'|'IX';
+type Door = 'A'|'B'|'C'|'D'|'E'|'F'|'G'|'H'|'I'|'J'|'K'|'L'|'M'|'N'|'O'|'P'|'Q'|'R'|'S'|'T'|'U'|'V'|'W'|'X'|'Y'|'Z'|'a'|'b'|'c'|'d'|'e'|'f'|'g'|'h'|'i'|'j'|'k'|'l'|'m'|'n'|'o'|'p'|'q'|'r'|'s'|'t'|'u'|'v'|'w'|'x'|'y'|'z'|'あ'|'い'|'う'|'え'|'お'|'か'|'き'|'く'|'け'|'こ'|'さ'|'し'|'す'|'せ'|'そ'|'た'|'ち'|'つ'|'て'|'と'|'な'|'に'|'ぬ'|'ね'|'の'|'は'|'ひ'|'ふ'|'へ'|'ほ'|'ま'|'み'|'む'|'め'|'も'|'や'|'ゆ'|'よ'|'わ'|'を'|'ん'|'I'|'II'|'III'|'IV'|'V'|'VI'|'VII'|'VIII'|'IX';
 
 const doorList: Door[] = [
   'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z',
-  'α', 'β', 'γ', 'δ', 'ε', 'ζ', 'η', 'θ', 'ι', 'κ', 'λ', 'μ', 'ν', 'ξ', 'ο', 'π', 'ρ', 'σ', 'τ', 'υ', 'φ', 'χ', 'ψ', 'ω',
+  'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z',
   'あ', 'い', 'う', 'え', 'お', 'か', 'き', 'く', 'け', 'こ', 'さ', 'し', 'す', 'せ', 'そ', 'た', 'ち', 'つ', 'て', 'と',
   'な', 'に', 'ぬ', 'ね', 'の', 'は', 'ひ', 'ふ', 'へ', 'ほ', 'ま', 'み', 'む', 'め', 'も', 'や', 'ゆ', 'よ', 'わ', 'を', 'ん',
   'I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX',
@@ -254,7 +254,7 @@ const MontyHallProblem: React.FC = () => {
       <Grid container maxWidth='100%' width='1000px' alignItems='flex-end' justifyContent='flex-start' style={{textAlign: 'center'}}>
         {doors.map((door) => {
           return (
-            <Grid key={door} item xs={doors.length <= 12 ? (12. / doors.length) : doors.length > 24 ? 0.6 : 1}>
+            <Grid key={door} item xs={doors.length <= 12 ? (12. / doors.length) : doors.length > 24 ? 0.9 : 1}>
               <div style={{
                 fontSize: '20pt',
                 borderBottom: `${firstSelectedDoor===door ? 'dashed' : 'solid'} 2px ${firstSelectedDoor===door ? 'gray' : secondSelectedDoor===door ? 'red' : 'white'}`,
