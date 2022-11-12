@@ -11,9 +11,15 @@ import CachedIcon from '@mui/icons-material/Cached';
 import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
 
-type Door = 'A'|'B'|'C'|'D'|'E'|'F'|'G'|'H'|'I'|'J'|'K'|'L'|'M'|'N'|'O'|'P'|'Q'|'R'|'S'|'T'|'U'|'V'|'W'|'X'|'Y'|'Z';
+type Door = 'A'|'B'|'C'|'D'|'E'|'F'|'G'|'H'|'I'|'J'|'K'|'L'|'M'|'N'|'O'|'P'|'Q'|'R'|'S'|'T'|'U'|'V'|'W'|'X'|'Y'|'Z'|'α'|'β'|'γ'|'δ'|'ε'|'ζ'|'η'|'θ'|'ι'|'κ'|'λ'|'μ'|'ν'|'ξ'|'ο'|'π'|'ρ'|'σ'|'τ'|'υ'|'φ'|'χ'|'ψ'|'ω'|'あ'|'い'|'う'|'え'|'お'|'か'|'き'|'く'|'け'|'こ'|'さ'|'し'|'す'|'せ'|'そ'|'た'|'ち'|'つ'|'て'|'と'|'な'|'に'|'ぬ'|'ね'|'の'|'は'|'ひ'|'ふ'|'へ'|'ほ'|'ま'|'み'|'む'|'め'|'も'|'や'|'ゆ'|'よ'|'わ'|'を'|'ん'|'I'|'II'|'III'|'IV'|'V'|'VI'|'VII'|'VIII'|'IX';
 
-const doorList: Door[] = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'];
+const doorList: Door[] = [
+  'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z',
+  'α', 'β', 'γ', 'δ', 'ε', 'ζ', 'η', 'θ', 'ι', 'κ', 'λ', 'μ', 'ν', 'ξ', 'ο', 'π', 'ρ', 'σ', 'τ', 'υ', 'φ', 'χ', 'ψ', 'ω',
+  'あ', 'い', 'う', 'え', 'お', 'か', 'き', 'く', 'け', 'こ', 'さ', 'し', 'す', 'せ', 'そ', 'た', 'ち', 'つ', 'て', 'と',
+  'な', 'に', 'ぬ', 'ね', 'の', 'は', 'ひ', 'ふ', 'へ', 'ほ', 'ま', 'み', 'む', 'め', 'も', 'や', 'ゆ', 'よ', 'わ', 'を', 'ん',
+  'I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX',
+];
 
 type DoorImgProps = {
   door: Door;
@@ -167,9 +173,9 @@ const MontyHallProblem: React.FC = () => {
 
   useEffect(() => {
     if (missingDoors.length===0) {
-      setAnnounce(`${doors.join(', ')}の中から一つのドアを選んでください`);
+      setAnnounce(`一つのドアを選んでください`);
     } else if (finalResult===null) {
-      setAnnounce(`実は${missingDoors.join(', ')}のドアはハズレです！残りの${doors.filter(door=>!missingDoors.includes(door)).join(', ')}から一つ選んでください。`);
+      setAnnounce(`実は${doors.filter(door=>!missingDoors.includes(door)).join(', ')}以外のドアはハズレです！${doors.filter(door=>!missingDoors.includes(door)).join(', ')}から一つ選んでください。`);
     }
   }, [missingDoors, finalMissingDoor, secondSelectedDoor, finalResult])
 
@@ -234,7 +240,7 @@ const MontyHallProblem: React.FC = () => {
       </Grid>
       <div style={{paddingTop: '10px'}}/>
       <Grid container>
-        <div style={{fontSize: '17pt'}}>{`次の${doors.length}つのドアのうち、一つが当たりのドアです。`}</div>
+        <div style={{fontSize: '17pt'}}>{`次の${doors.length}個のドアのうち、一つが当たりのドアです。`}</div>
         {hiddenButton ? (
           <Button style={{zIndex: 100}} color={autoMode ? "primary" : "inherit"} variant="outlined" startIcon={autoMode ? <PlayDisabledIcon/> : <PlayArrowIcon />} onClick={()=>{setAutoMode(v=>!v)}} disabled={false} size="medium">
             {autoMode ? '実行停止' : `自動実行${bakusokuMode ? '(爆速)' : ''}`}
@@ -245,24 +251,18 @@ const MontyHallProblem: React.FC = () => {
           {announce}
         </span>
       <div style={{padding: '5px'}}/>
-      <Grid container maxWidth='100%' width='1000px' alignItems='flex-end' justifyContent='flex-end' style={{textAlign: 'center'}}>
+      <Grid container maxWidth='100%' width='1000px' alignItems='flex-end' justifyContent='flex-start' style={{textAlign: 'center'}}>
         {doors.map((door) => {
           return (
-            <Grid key={door} item xs={12./doors.length}>
-              <span style={{
+            <Grid key={door} item xs={doors.length <= 12 ? (12. / doors.length) : doors.length > 24 ? 0.6 : 1}>
+              <div style={{
                 fontSize: '20pt',
                 borderBottom: `${firstSelectedDoor===door ? 'dashed' : 'solid'} 2px ${firstSelectedDoor===door ? 'gray' : secondSelectedDoor===door ? 'red' : 'white'}`,
                 borderTop: `${firstSelectedDoor===door ? 'dashed' : 'solid'} 2px ${firstSelectedDoor===door ? 'gray' : secondSelectedDoor===door ? 'red' : 'white'}`,
                 borderLeft: `${firstSelectedDoor===door ? 'dashed' : 'solid'} 2px ${firstSelectedDoor===door ? 'gray' : secondSelectedDoor===door ? 'red' : 'white'}`,
                 borderRight: `${firstSelectedDoor===door ? 'dashed' : 'solid'} 2px ${firstSelectedDoor===door ? 'gray' : secondSelectedDoor===door ? 'red' : 'white'}`,
                 borderRadius: `10px`,
-              }}>{door}</span>
-            </Grid>
-          );
-        })}
-        {doors.map((door) => {
-          return (
-            <Grid key={door} item xs={12./doors.length}>
+              }}>{door}</div>
               <DoorImg
                 door={door}
                 firstSelectedDoor={firstSelectedDoor}
