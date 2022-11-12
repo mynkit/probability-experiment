@@ -29,7 +29,7 @@ type DoorImgProps = {
   setShowResultModal: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const range = (start: number, end: number) => Array.from({length: (end - start + 1)}, (v, k) => k + start);;
+const range = (start: number, end: number) => Array.from({length: (end - start)}, (v, k) => k + start);;
 
 const DoorImg: React.FC<DoorImgProps> = ({ door, firstSelectedDoor, setFirstSelectedDoor, missingDoors, setShowAlertModal, bingo, finalMissingDoor, setFinalMissingDoor, secondSelectedDoor, setSecondSelectedDoor, finalResult, setFinalResult, setShowResultModal }) => {
   const [imgSrc, setImgSrc] = useState('')
