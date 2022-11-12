@@ -40,7 +40,7 @@ const DoorImg: React.FC<DoorImgProps> = ({ door, firstSelectedDoor, setFirstSele
     if (missingDoors.includes(door) || finalMissingDoor===door) {
       setImgSrc('/doors/door_open.png');
     } else if (secondSelectedDoor!==null && bingo===door && bingo===secondSelectedDoor) {
-      setImgSrc('doors/present_happy_boy.png');
+      setImgSrc('doors/present_happy_boy_resize.png');
     } else {
       setImgSrc('/doors/door_close_resize.png');
     }
