@@ -159,7 +159,9 @@ const MontyHallProblem: React.FC = () => {
 
   useEffect(() => {
     if (firstSelectedDoor!==null) {
-      setMissingDoors(shuffle(doors.filter(door => door!==firstSelectedDoor && door!=bingo)).slice(0, doors.length-2));
+      let missingDoors_ = shuffle(doors.filter(door => door!==firstSelectedDoor && door!=bingo)).slice(0, doors.length-2);
+      missingDoors_.sort();
+      setMissingDoors(missingDoors_);
     }
   }, [firstSelectedDoor])
 
