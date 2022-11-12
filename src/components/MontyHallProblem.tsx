@@ -122,6 +122,18 @@ const MontyHallProblem: React.FC = () => {
     setBingo(shuffle(doors)[0]);
   }
 
+  const initResult = () => {
+    localStorage.setItem('notChangedBingoCount', '0');
+    localStorage.setItem('changedBingoCount', '0');
+    localStorage.setItem('notChangedMissCount', '0');
+    localStorage.setItem('changedMissCount', '0');
+    setNotChangedBingoCount(0);
+    setChangedBingoCount(0);
+    setNotChangedMissCount(0);
+    setChangedMissCount(0);
+    setShowInitModal(false);
+  }
+
   useEffect(() => {
     if (hiddenCommandCount>=15) {
       setHiddenButton(true);
@@ -186,7 +198,7 @@ const MontyHallProblem: React.FC = () => {
         if (document.getElementById(`resultmodal`)) {
           (document.getElementById(`resultmodal`) as HTMLElement).click();
         } else {
-          let targetDoor = shuffle(['A', 'B', 'C'])[0];
+          let targetDoor = shuffle(doors)[0];
           (document.getElementById(`img${targetDoor}`) as HTMLElement).click();
         }
       }, clickInterval);
@@ -201,10 +213,20 @@ const MontyHallProblem: React.FC = () => {
       <h1 onClick={()=>setHiddenCommandCount(v=>v+1)} style={{backgroundColor: `rgb(${0},${0},${0},${Math.min(hiddenCommandCount/100., 0.1)})`}}>モンティホール問題</h1>
       <div style={{paddingTop: '10px'}}/>
       <Grid container justifyContent='flex-start' alignItems='center'>
-        <Button color={autoMode ? "primary" : "inherit"} variant="outlined" startIcon={<RemoveIcon />} onClick={()=>{if(doorCount>3)setDoorCount(v=>v-1)}} disabled={false} size="medium">
+        <Button color={autoMode ? "primary" : "inherit"} variant="outlined" startIcon={<RemoveIcon />} onClick={()=>{
+          if(doorCount>3) {
+            setDoorCount(v=>v-1);
+            initResult();
+          }
+        }} disabled={false} size="medium">
           ドアを減らす
         </Button>
-        <Button color={autoMode ? "primary" : "inherit"} variant="outlined" startIcon={<AddIcon />} onClick={()=>{if(doorCount<doorList.length)setDoorCount(v=>v+1)}} disabled={false} size="medium">
+        <Button color={autoMode ? "primary" : "inherit"} variant="outlined" startIcon={<AddIcon />} onClick={()=>{
+          if(doorCount<doorList.length) {
+            setDoorCount(v=>v+1);
+            initResult();
+          }
+        }} disabled={false} size="medium">
           ドアを増やす
         </Button>
       </Grid>
@@ -315,10 +337,7 @@ const MontyHallProblem: React.FC = () => {
       <InitModal
         showInitModal={showInitModal}
         setShowInitModal={setShowInitModal}
-        setNotChangedBingoCount={setNotChangedBingoCount}
-        setChangedBingoCount={setChangedBingoCount}
-        setNotChangedMissCount={setNotChangedMissCount}
-        setChangedMissCount={setChangedMissCount}
+        initResult={initResult}
       />
     </div>
   )
