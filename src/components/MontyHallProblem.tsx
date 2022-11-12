@@ -218,7 +218,7 @@ const MontyHallProblem: React.FC = () => {
             setDoorCount(v=>v-1);
             initResult();
           }
-        }} disabled={false} size="medium">
+        }} disabled={autoMode} size="medium">
           ドアを減らす
         </Button>
         <Button color={autoMode ? "primary" : "inherit"} variant="outlined" startIcon={<AddIcon />} onClick={()=>{
@@ -226,7 +226,7 @@ const MontyHallProblem: React.FC = () => {
             setDoorCount(v=>v+1);
             initResult();
           }
-        }} disabled={false} size="medium">
+        }} disabled={autoMode} size="medium">
           ドアを増やす
         </Button>
       </Grid>
