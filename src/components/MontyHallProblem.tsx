@@ -11,15 +11,7 @@ import CachedIcon from '@mui/icons-material/Cached';
 import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
 
-type Door = 'A'|'B'|'C'|'D'|'E'|'F'|'G'|'H'|'I'|'J'|'K'|'L'|'M'|'N'|'O'|'P'|'Q'|'R'|'S'|'T'|'U'|'V'|'W'|'X'|'Y'|'Z'|'a'|'b'|'c'|'d'|'e'|'f'|'g'|'h'|'i'|'j'|'k'|'l'|'m'|'n'|'o'|'p'|'q'|'r'|'s'|'t'|'u'|'v'|'w'|'x'|'y'|'z'|'あ'|'い'|'う'|'え'|'お'|'か'|'き'|'く'|'け'|'こ'|'さ'|'し'|'す'|'せ'|'そ'|'た'|'ち'|'つ'|'て'|'と'|'な'|'に'|'ぬ'|'ね'|'の'|'は'|'ひ'|'ふ'|'へ'|'ほ'|'ま'|'み'|'む'|'め'|'も'|'や'|'ゆ'|'よ'|'わ'|'を'|'ん'|'1'|'2'|'3'|'4'|'5'|'6'|'7'|'8'|'9';
-
-const doorList: Door[] = [
-  'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z',
-  'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z',
-  'あ', 'い', 'う', 'え', 'お', 'か', 'き', 'く', 'け', 'こ', 'さ', 'し', 'す', 'せ', 'そ', 'た', 'ち', 'つ', 'て', 'と',
-  'な', 'に', 'ぬ', 'ね', 'の', 'は', 'ひ', 'ふ', 'へ', 'ほ', 'ま', 'み', 'む', 'め', 'も', 'や', 'ゆ', 'よ', 'わ', 'を', 'ん',
-  '1', '2', '3', '4', '5', '6', '7', '8', '9',
-];
+type Door = number;
 
 type DoorImgProps = {
   door: Door;
@@ -36,6 +28,8 @@ type DoorImgProps = {
   setFinalResult: React.Dispatch<React.SetStateAction<0 | 1 | null>>;
   setShowResultModal: React.Dispatch<React.SetStateAction<boolean>>;
 }
+
+const range = (start: number, end: number) => Array.from({length: (end - start + 1)}, (v, k) => k + start);;
 
 const DoorImg: React.FC<DoorImgProps> = ({ door, firstSelectedDoor, setFirstSelectedDoor, missingDoors, setShowAlertModal, bingo, finalMissingDoor, setFinalMissingDoor, secondSelectedDoor, setSecondSelectedDoor, finalResult, setFinalResult, setShowResultModal }) => {
   const [imgSrc, setImgSrc] = useState('')
@@ -78,7 +72,7 @@ const firstBingo: Door = shuffle(['A', 'B', 'C'])[0]; // 当たりの初期値
 
 const MontyHallProblem: React.FC = () => {
   const [doorCount, setDoorCount] = useState(3);
-  const [doors, setDoors] = useState<Door[]>(doorList.slice(0, doorCount));
+  const [doors, setDoors] = useState<Door[]>(range(1, doorCount+1));
   const [bingo, setBingo] = useState(firstBingo);
   const [firstSelectedDoor, setFirstSelectedDoor] = useState<Door|null>(null);
   const [missingDoors, setMissingDoors] = useState<Door[]>([]);
@@ -105,7 +99,7 @@ const MontyHallProblem: React.FC = () => {
   }, [])
 
   useEffect(() => {
-    setDoors(doorList.slice(0, doorCount));
+    setDoors(range(1, doorCount+1));
     init();
   }, [doorCount])
 
@@ -230,10 +224,8 @@ const MontyHallProblem: React.FC = () => {
           ドアを減らす
         </Button>
         <Button color={autoMode ? "primary" : "inherit"} variant="outlined" startIcon={<AddIcon />} onClick={()=>{
-          if(doorCount<doorList.length) {
-            setDoorCount(v=>v+1);
-            initResult();
-          }
+          setDoorCount(v=>v+1);
+          initResult();
         }} disabled={autoMode} size="medium">
           ドアを増やす
         </Button>
