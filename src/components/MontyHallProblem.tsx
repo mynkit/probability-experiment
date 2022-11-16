@@ -315,7 +315,7 @@ const MontyHallProblem: React.FC = () => {
           <span style={{fontSize: '15pt'}}>{changedBingoCount+changedMissCount}</span>
         </Grid>
         <Grid item xs={2.4}>
-          <span style={{fontSize: '15pt'}}>{changedBingoCount+changedMissCount>0 ? Math.floor(100*changedBingoCount/(changedBingoCount+changedMissCount)) : ''}</span>
+          <span style={{fontSize: '15pt'}}>{changedBingoCount+changedMissCount>0 ? Math.floor(100*100*changedBingoCount/(changedBingoCount+changedMissCount))/100 : ''}</span>
         </Grid>
         <Grid item xs={2.4}>
           <span style={{fontSize: '15pt'}}>変更無</span>
@@ -330,7 +330,7 @@ const MontyHallProblem: React.FC = () => {
           <span style={{fontSize: '15pt'}}>{notChangedBingoCount+notChangedMissCount}</span>
         </Grid>
         <Grid item xs={2.4}>
-          <span style={{fontSize: '15pt'}}>{notChangedBingoCount+notChangedMissCount>0 ? Math.floor(100*notChangedBingoCount/(notChangedBingoCount+notChangedMissCount)) : ''}</span>
+          <span style={{fontSize: '15pt'}}>{notChangedBingoCount+notChangedMissCount>0 ? Math.floor(100*100*notChangedBingoCount/(notChangedBingoCount+notChangedMissCount))/100 : ''}</span>
         </Grid>
       </Grid>
       <AlertModal showAlertModal={showAlertModal} setShowAlertModal={setShowAlertModal} alertText={`${doors.filter(door=>!missingDoors.includes(door)).join(', ')}から選んでください`}/>
