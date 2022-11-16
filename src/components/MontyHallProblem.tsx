@@ -6,7 +6,6 @@ import ResultModal from './ResultModal';
 import Button from '@mui/material/Button';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import PlayDisabledIcon from '@mui/icons-material/PlayDisabled';
-import InitModal from './InitModal';
 import CachedIcon from '@mui/icons-material/Cached';
 import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
@@ -82,7 +81,6 @@ const MontyHallProblem: React.FC = () => {
   const [announce, setAnnounce] = useState('');
   const [showAlertModal, setShowAlertModal] = useState(false);
   const [showResultModal, setShowResultModal] = useState(false);
-  const [showInitModal, setShowInitModal] = useState(false);
   const [changedBingoCount, setChangedBingoCount] = useState(0);
   const [changedMissCount, setChangedMissCount] = useState(0);
   const [notChangedBingoCount, setNotChangedBingoCount] = useState(0);
@@ -127,7 +125,6 @@ const MontyHallProblem: React.FC = () => {
     setChangedBingoCount(0);
     setNotChangedMissCount(0);
     setChangedMissCount(0);
-    setShowInitModal(false);
   }
 
   useEffect(() => {
@@ -277,7 +274,7 @@ const MontyHallProblem: React.FC = () => {
       <Grid container maxWidth='100%' width='700px' alignItems='flex-end' justifyContent='flex-end' style={{textAlign: 'center'}}>
         <Grid item xs={2.4}>
           <Button style={{fontSize: '10pt', paddingLeft: '5px', paddingRight: '5px', paddingTop: '2px', paddingBottom: '2px'}} color={"inherit"} variant="outlined" startIcon={<CachedIcon />} onClick={()=>{
-            setShowInitModal(true);
+            initResult();
           }}>
             初期化
           </Button>
@@ -327,11 +324,6 @@ const MontyHallProblem: React.FC = () => {
       </Grid>
       <AlertModal showAlertModal={showAlertModal} setShowAlertModal={setShowAlertModal} alertText={`${doors.filter(door=>!missingDoors.includes(door)).join(', ')}から選んでください`}/>
       <ResultModal showResultModal={showResultModal} setShowResultModal={setShowResultModal} finalResult={finalResult} init={init}/>
-      <InitModal
-        showInitModal={showInitModal}
-        setShowInitModal={setShowInitModal}
-        initResult={initResult}
-      />
     </div>
   )
 }
