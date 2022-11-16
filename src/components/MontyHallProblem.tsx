@@ -200,7 +200,14 @@ const MontyHallProblem: React.FC = () => {
         if (document.getElementById(`resultmodal`)) {
           (document.getElementById(`resultmodal`) as HTMLElement).click();
         } else {
-          let targetDoor = shuffle(doors)[0];
+          let closedDoors: Door[] = [];
+          for (let i=0; i<doorCount; i++) {
+            let d = document.getElementById(`img${doors[i]}`) as HTMLElement;
+            if (d.getAttribute('src')?.includes('close')) {
+              closedDoors.push(doors[i]);
+            }
+          }
+          let targetDoor = shuffle(closedDoors)[0];
           (document.getElementById(`img${targetDoor}`) as HTMLElement).click();
         }
       }, clickInterval);
