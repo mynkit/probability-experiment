@@ -98,7 +98,7 @@ const Sidebar: React.FC<SidebarProps> = ({ target, setTarget }) => {
         onKeyDown={(e)=>{if (e.key === 'Enter') selectMenu('montyhall')}}
         style={target==='montyhall' ? {textDecoration: 'underline'} : {textDecoration: ''}}
       >
-        モンティホール問題
+        モンティホール
       </a>
       <a className="menu-item"
         onClick={()=>{selectMenu('lottery')}}
