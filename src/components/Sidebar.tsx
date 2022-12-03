@@ -95,17 +95,17 @@ const Sidebar: React.FC<SidebarProps> = ({ target, setTarget }) => {
     <Menu styles={ bmStyles } right isOpen={isOpen} onOpen={handleIsOpen} onClose={closeSideBar}>
       <a className="menu-item"
         onClick={()=>{selectMenu('montyhall')}}
-        onKeyDown={(e)=>{if (e.key === 'Enter') selectMenu('home')}}
+        onKeyDown={(e)=>{if (e.key === 'Enter') selectMenu('montyhall')}}
         style={target==='montyhall' ? {textDecoration: 'underline'} : {textDecoration: ''}}
       >
-        MontyHall
+        モンティホール問題
       </a>
       <a className="menu-item"
         onClick={()=>{selectMenu('lottery')}}
         onKeyDown={(e)=>{if (e.key === 'Enter') selectMenu('lottery')}}
         style={target==='lottery' ? {textDecoration: 'underline'} : {textDecoration: ''}}
       >
-        lottery
+        くじ引き
       </a>
     </Menu>
   )
