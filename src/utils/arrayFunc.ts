@@ -5,3 +5,7 @@ export const shuffle = ([...array]) => {
   }
   return array;
 }
+
+export const range = (start: number, end: number) => {
+  return Array.from({length: (end - start)}, (v, k) => k + start);
+}

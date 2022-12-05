@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import Grid from '@mui/material/Grid';
-import { shuffle } from '../utils/arrayFunc';
+import { shuffle, range } from '../utils/arrayFunc';
 import AlertModal from './AlertModal';
 import ResultModal from './ResultModal';
 import Button from '@mui/material/Button';
@@ -27,8 +27,6 @@ type DoorImgProps = {
   setFinalResult: React.Dispatch<React.SetStateAction<0 | 1 | null>>;
   setShowResultModal: React.Dispatch<React.SetStateAction<boolean>>;
 }
-
-const range = (start: number, end: number) => Array.from({length: (end - start)}, (v, k) => k + start);;
 
 const DoorImg: React.FC<DoorImgProps> = ({ door, firstSelectedDoor, setFirstSelectedDoor, missingDoors, setShowAlertModal, bingo, finalMissingDoor, setFinalMissingDoor, secondSelectedDoor, setSecondSelectedDoor, finalResult, setFinalResult, setShowResultModal }) => {
   const [imgSrc, setImgSrc] = useState('')
