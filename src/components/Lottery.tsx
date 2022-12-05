@@ -39,8 +39,8 @@ const Lottery = () => {
   }
 
   useEffect(() => {
-    console.log(`kujiRemains: ${kujiRemains}`);
-    console.log(`kujiResults: ${kujiResults}`);
+    // console.log(`kujiRemains: ${kujiRemains}`);
+    // console.log(`kujiResults: ${kujiResults}`);
   }, [kujiRemains, kujiResults])
 
   useEffect(() => {
@@ -60,7 +60,7 @@ const Lottery = () => {
           参加人数-1
         </Button>
         <Button color='inherit' variant="outlined" startIcon={<AddIcon />} onClick={()=>{
-          setPersonCount(v=>v+1);
+          if (kujiCount>personCount && personCount<11)setPersonCount(v=>v+1);
           init();
         }}>
           参加人数+1
@@ -69,7 +69,7 @@ const Lottery = () => {
       <div>
         <span style={{paddingRight: '10px'}}>{`くじ本数：${kujiCount}個`}</span>
         <Button color='inherit' variant="outlined" startIcon={<RemoveIcon />} onClick={()=>{
-          if (kujiCount>=2 && atariCount<kujiCount-1)setKujiCount(v=>v-1);
+          if (kujiCount>=2 && atariCount<kujiCount-1 && kujiCount>personCount)setKujiCount(v=>v-1);
           init();
         }}>
           くじ本数-1
