@@ -114,25 +114,42 @@ const Lottery = () => {
         
       </Grid>
       <div style={{padding: '5px'}}/>
-      <Grid container maxWidth='100%' width='1000px' alignItems='flex-start' justifyContent='flex-start' style={{textAlign: 'center'}}>
+      <Grid container maxWidth='100%' width='1000px' alignItems='flex-start' justifyContent='center' style={{textAlign: 'center'}}>
         {persons.map((person) => {
           return (
-            <Grid key={person} item xs={persons.length <= 12 ? (12. / persons.length) : persons.length > 24 ? 0.9 : 1}>
+            <Grid key={person} item xs={persons.length <= 12 ? (12. / persons.length) : persons.length > 24 ? 0.9 : 1} style={{position: 'relative', minHeight: '250px'}}>
               <div style={{
                 fontSize: '20pt',
               }}>{person}</div>
               {currentPersonNum>person ? (
+                <>
                 <img
-                  src={
-                    currentPersonNum===personCount+1 ? (
-                      kujiResults[person-1]===1 ? '/doors/kuji_ken2_atari.png'
-                      : '/doors/kuji_ken3_hazure.png'
-                    ) : (
-                      '/lotteries/document_paper_mekure.png'
-                    )
-                  }
+                  src='/lotteries/document_paper_mekure.png'
                   width='100%'
+                  style={{
+                    position: 'absolute',top: '50%', left: '50%',
+                    msTransform: 'translate(-50%,-50%)', WebkitTransform: 'translate(-50%,-50%)', transform: 'translate(-50%,-50%)',
+                    margin: '0', padding: '0',
+                    maxHeight: '200px'
+                  }}
                 />
+                {
+                  currentPersonNum===personCount+1 ? (
+                    <p style={{
+                      position: 'absolute',
+                      top: '50%', left: '50%',
+                      msTransform: 'translate(-50%,-50%)', WebkitTransform: 'translate(-50%,-50%)', transform: 'translate(-50%,-50%)',
+                      margin: '0', padding: '0',
+                      fontSize: '50pt', color: 'red',
+                      cursor: 'pointer'
+                    }} onClick={()=>{init();}}>
+                      {kujiResults[person-1]===1 ? '○' : '×'}
+                    </p>
+                  ) : (
+                    <></>
+                  )
+                }
+                </>
               ) : <></>}
             </Grid>
           );
