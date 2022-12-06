@@ -39,6 +39,10 @@ const Lottery = () => {
   }
 
   useEffect(() => {
+    document.title = 'くじ引きの確率';
+  }, [])
+
+  useEffect(() => {
     // console.log(`kujiRemains: ${kujiRemains}`);
     // console.log(`kujiResults: ${kujiResults}`);
   }, [kujiRemains, kujiResults])
