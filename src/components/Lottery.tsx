@@ -118,47 +118,47 @@ const Lottery = () => {
       ): <></>}
       <div>
         <span style={{paddingRight: '10px'}}>{`参加人数：${personCount}人`}</span>
-        <Button color='inherit' variant="outlined" startIcon={<RemoveIcon />} onClick={()=>{
+        <Button color='inherit' variant="outlined" onClick={()=>{
           if (personCount>=3)setPersonCount(v=>v-1);
           init();
         }}>
-          参加人数-1
+          <RemoveIcon />
         </Button>
-        <Button color='inherit' variant="outlined" startIcon={<AddIcon />} onClick={()=>{
+        <Button color='inherit' variant="outlined" onClick={()=>{
           if (kujiCount>personCount && personCount<11)setPersonCount(v=>v+1);
           init();
         }}>
-          参加人数+1
+          <AddIcon />
         </Button>
       </div>
       <div>
         <span style={{paddingRight: '10px'}}>{`くじ本数：${kujiCount}個`}</span>
-        <Button color='inherit' variant="outlined" startIcon={<RemoveIcon />} onClick={()=>{
+        <Button color='inherit' variant="outlined" onClick={()=>{
           if (kujiCount>=2 && atariCount<kujiCount-1 && kujiCount>personCount)setKujiCount(v=>v-1);
           init();
         }}>
-          くじ本数-1
+          <RemoveIcon />
         </Button>
-        <Button color='inherit' variant="outlined" startIcon={<AddIcon />} onClick={()=>{
+        <Button color='inherit' variant="outlined" onClick={()=>{
           setKujiCount(v=>v+1);
           init();
         }}>
-          くじ本数+1
+          <AddIcon />
         </Button>
       </div>
       <div>
         <span style={{paddingRight: '10px'}}>{`当たり数：${atariCount}個`}</span>
-        <Button color='inherit' variant="outlined" startIcon={<RemoveIcon />} onClick={()=>{
+        <Button color='inherit' variant="outlined" onClick={()=>{
           if (atariCount>=2)setAtariCount(v=>v-1);
           init();
         }}>
-          当たり数-1
+          <RemoveIcon />
         </Button>
-        <Button color='inherit' variant="outlined" startIcon={<AddIcon />} onClick={()=>{
+        <Button color='inherit' variant="outlined" onClick={()=>{
           if (atariCount<kujiCount-1)setAtariCount(v=>v+1);
           init();
         }}>
-          当たり数+1
+          <AddIcon />
         </Button>
       </div>
       <div style={{paddingTop: '20px'}}/>
