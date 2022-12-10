@@ -4,6 +4,8 @@ import Button from '@mui/material/Button';
 import CachedIcon from '@mui/icons-material/Cached';
 import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
+import PlayArrowIcon from '@mui/icons-material/PlayArrow';
+import PlayDisabledIcon from '@mui/icons-material/PlayDisabled';
 import { shuffle, range, arrayPlus } from '../utils/arrayFunc';
 
 const Lottery = () => {
@@ -16,6 +18,12 @@ const Lottery = () => {
   const [kujiResults, setKujiResults] = useState<(1|0)[]>([]);
   const [atariSummary, setAtariSummary] = useState<number[]>(new Array<number>(personCount).fill(0));
   const [summaryCount, setSummaryCount] = useState<number[]>(new Array<number>(personCount).fill(0));
+  const [autoMode, setAutoMode] = useState(false);
+  const [timeId, setTimeId] = useState<NodeJS.Timer|null>(null);
+  const [hiddenCommandCount, setHiddenCommandCount] = useState(0);
+  const [hiddenButton, setHiddenButton] = useState(false);
+  const [clickInterval, setClickInterval] = useState(100); // 単位はミリ秒
+  const [bakusokuMode, setBakusokuMode] = useState(false);
 
   const init = () => {
     setCurrentPersonNum(1);
@@ -64,9 +72,50 @@ const Lottery = () => {
     initResult();
   }, [kujiCount, atariCount])
 
+  useEffect(() => {
+    if (hiddenCommandCount>=15) {
+      setHiddenButton(true);
+      if (hiddenCommandCount>=25) {
+        if (hiddenCommandCount % 2 === 1) {
+          setBakusokuMode(true);
+        } else {
+          setBakusokuMode(false);
+        }
+      }
+    } else {
+      setHiddenButton(false);
+    }
+  }, [hiddenCommandCount])
+
+  useEffect(() => {
+    if (bakusokuMode) {
+      setClickInterval(10);
+    } else {
+      setClickInterval(100);
+    }
+  }, [bakusokuMode])
+
+  useEffect(() => {
+    if (autoMode) {
+      let timerId_ = setInterval(()=>{
+        if (document.getElementById(`kuji`)) {
+          (document.getElementById(`kuji`) as HTMLElement).click();
+        }
+      }, clickInterval);
+      setTimeId(timerId_)
+    } else {
+      if (timeId!==null) clearInterval(timeId);
+    }
+  }, [autoMode])
+
   return (
     <div style={{padding: '10px', width: '700px', maxWidth: '100%'}}>
-      <h1>くじ引きの確率</h1>
+      <h1 onClick={()=>setHiddenCommandCount(v=>v+1)} style={{backgroundColor: `rgb(${0},${0},${0},${Math.min(hiddenCommandCount/100., 0.1)})`}}>くじ引きの確率</h1>
+      {hiddenButton ? (
+        <Button style={{zIndex: 100}} color={autoMode ? "primary" : "inherit"} variant="outlined" startIcon={autoMode ? <PlayDisabledIcon/> : <PlayArrowIcon />} onClick={()=>{setAutoMode(v=>!v)}} disabled={false} size="medium">
+          {autoMode ? '実行停止' : `自動実行${bakusokuMode ? '(爆速)' : ''}`}
+        </Button>
+      ): <></>}
       <div>
         <span style={{paddingRight: '10px'}}>{`参加人数：${personCount}人`}</span>
         <Button color='inherit' variant="outlined" startIcon={<RemoveIcon />} onClick={()=>{
@@ -114,7 +163,7 @@ const Lottery = () => {
       </div>
       <div style={{paddingTop: '20px'}}/>
       <Grid container alignItems='center' justifyContent='center' style={{position: 'relative'}}>
-        <img src='/lotteries/kujibiki_box.png' width='50%' style={{cursor: 'pointer'}} onClick={()=>{kujibikiClick()}}/>
+        <img id='kuji' src='/lotteries/kujibiki_box.png' width='50%' style={{cursor: 'pointer'}} onClick={()=>{kujibikiClick()}}/>
         {currentPersonNum===personCount+1 ? (
           <p style={{
             position: 'absolute',
