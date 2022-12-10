@@ -110,7 +110,7 @@ const Lottery = () => {
 
   return (
     <div style={{padding: '10px', width: '700px', maxWidth: '100%'}}>
-      <h1 onClick={()=>setHiddenCommandCount(v=>v+1)} style={{backgroundColor: `rgb(${0},${0},${0},${Math.min(hiddenCommandCount/100., 0.1)})`}}>くじ引きの確率</h1>
+      <h1 onClick={()=>setHiddenCommandCount(v=>v+1)} style={{backgroundColor: `rgb(${0},${0},${0},${Math.min(hiddenCommandCount/100., 0.1)})`, width: '100vw'}}>くじ引きの確率</h1>
       {hiddenButton ? (
         <Button style={{zIndex: 100}} color={autoMode ? "primary" : "inherit"} variant="outlined" startIcon={autoMode ? <PlayDisabledIcon/> : <PlayArrowIcon />} onClick={()=>{setAutoMode(v=>!v)}} disabled={false} size="medium">
           {autoMode ? '実行停止' : `自動実行${bakusokuMode ? '(爆速)' : ''}`}
