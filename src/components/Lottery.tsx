@@ -162,7 +162,7 @@ const Lottery = () => {
         </Button>
       </div>
       <div style={{paddingTop: '20px'}}/>
-      <Grid container alignItems='center' justifyContent='center' style={{position: 'relative'}}>
+      <Grid container alignItems='center' justifyContent='center' style={{position: 'relative', maxWidth: '100%', width: '700px'}}>
         <img id='kuji' src='/lotteries/kujibiki_box.png' width='50%' style={{cursor: 'pointer'}} onClick={()=>{kujibikiClick()}}/>
         {currentPersonNum===personCount+1 ? (
           <p style={{
@@ -179,7 +179,7 @@ const Lottery = () => {
         
       </Grid>
       <div style={{padding: '5px'}}/>
-      <Grid container maxWidth='100%' width='1000px' alignItems='flex-start' justifyContent='center' style={{textAlign: 'center'}}>
+      <Grid container maxWidth='100%' width='1000px' alignItems='flex-start' justifyContent='center' style={{textAlign: 'center', maxWidth: '100%', width: '700px'}}>
         {persons.map((person) => {
           return (
             <Grid key={person} item xs={persons.length <= 12 ? (12. / persons.length) : persons.length > 24 ? 0.9 : 1} style={{position: 'relative', minHeight: '250px'}}>
