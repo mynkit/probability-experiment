@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react'
 import Grid from '@mui/material/Grid';
 import Button from '@mui/material/Button';
+import CachedIcon from '@mui/icons-material/Cached';
 import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
-import { shuffle, range } from '../utils/arrayFunc';
+import { shuffle, range, arrayPlus } from '../utils/arrayFunc';
 
 const Lottery = () => {
   const [personCount, setPersonCount] = useState(5);
@@ -13,12 +14,14 @@ const Lottery = () => {
   const [currentPersonNum, setCurrentPersonNum] = useState(1);
   const [kujiRemains, setKujiRemains] = useState<(1|0)[]>([]);
   const [kujiResults, setKujiResults] = useState<(1|0)[]>([]);
+  const [atariSummary, setAtariSummary] = useState<number[]>(new Array<number>(personCount).fill(0));
+  const [summaryCount, setSummaryCount] = useState<number[]>(new Array<number>(personCount).fill(0));
 
   const init = () => {
     setCurrentPersonNum(1);
     let atari = new Array<0|1>(atariCount).fill(1);
     let hazure = new Array<0|1>(kujiCount - atariCount).fill(0);
-    let kuji = atari.concat(hazure)
+    let kuji = atari.concat(hazure);
     setKujiRemains(kuji);
     setKujiResults([]);
   }
@@ -36,6 +39,15 @@ const Lottery = () => {
     setKujiRemains(kujiRemains_);
     setKujiResults(kujiResults_);
     setCurrentPersonNum(v=>v+1);
+    if (currentPersonNum===personCount) {
+      setAtariSummary(arrayPlus(atariSummary, kujiResults_));
+      setSummaryCount(arrayPlus(summaryCount, new Array<number>(personCount).fill(1)));
+    }
+  }
+
+  const initResult = () => {
+    setAtariSummary(new Array<number>(personCount).fill(0));
+    setSummaryCount(new Array<number>(personCount).fill(0));
   }
 
   useEffect(() => {
@@ -43,14 +55,14 @@ const Lottery = () => {
   }, [])
 
   useEffect(() => {
-    // console.log(`kujiRemains: ${kujiRemains}`);
-    // console.log(`kujiResults: ${kujiResults}`);
-  }, [kujiRemains, kujiResults])
-
-  useEffect(() => {
     setPersons(range(1, personCount+1));
+    initResult();
     init();
   }, [personCount])
+
+  useEffect(() => {
+    initResult();
+  }, [kujiCount, atariCount])
 
   return (
     <div style={{padding: '10px', width: '700px', maxWidth: '100%'}}>
@@ -144,7 +156,7 @@ const Lottery = () => {
                       top: '50%', left: '50%',
                       msTransform: 'translate(-50%,-50%)', WebkitTransform: 'translate(-50%,-50%)', transform: 'translate(-50%,-50%)',
                       margin: '0', padding: '0',
-                      fontSize: '50pt', color: 'red',
+                      fontSize: '40pt', color: 'red',
                       cursor: 'pointer'
                     }} onClick={()=>{init();}}>
                       {kujiResults[person-1]===1 ? '○' : '×'}
@@ -157,6 +169,51 @@ const Lottery = () => {
               ) : <></>}
             </Grid>
           );
+        })}
+      </Grid>
+      <div style={{paddingTop: '20px'}}/>
+      <Grid container maxWidth='100%' width='700px' alignItems='flex-end' justifyContent='flex-end' style={{textAlign: 'center'}}>
+        <Grid container>
+          <Grid item xs={2.4}>
+            <Button style={{fontSize: '10pt', paddingLeft: '5px', paddingRight: '5px', paddingTop: '2px', paddingBottom: '2px'}} color={"inherit"} variant="outlined" startIcon={<CachedIcon />} onClick={()=>{
+              initResult();
+            }}>
+              初期化
+            </Button>
+          </Grid>
+          <Grid item xs={2.4}>
+            <span style={{fontSize: '15pt'}}>当たり</span>
+          </Grid>
+          <Grid item xs={2.4}>
+            <span style={{fontSize: '15pt'}}>はずれ</span>
+          </Grid>
+          <Grid item xs={2.4}>
+            <span style={{fontSize: '15pt'}}>合計</span>
+          </Grid>
+          <Grid item xs={2.4}>
+            <span style={{fontSize: '15pt'}}>勝率(%)</span>
+          </Grid>
+        </Grid>
+        {persons.map((person) => {
+          return (
+            <Grid container key={person} style={{padding: '5px'}}>
+              <Grid item xs={2.4}>
+                <span style={{fontSize: '15pt'}}>{person}</span>
+              </Grid>
+              <Grid item xs={2.4}>
+                <span style={{fontSize: '15pt'}}>{atariSummary[person-1]}</span>
+              </Grid>
+              <Grid item xs={2.4}>
+                <span style={{fontSize: '15pt'}}>{summaryCount[person-1]-atariSummary[person-1]}</span>
+              </Grid>
+              <Grid item xs={2.4}>
+                <span style={{fontSize: '15pt'}}>{summaryCount[person-1]}</span>
+              </Grid>
+              <Grid item xs={2.4}>
+                <span style={{fontSize: '15pt'}}>{summaryCount[person-1]>0 ? Math.floor(100*100*atariSummary[person-1]/(summaryCount[person-1]))/100 : ''}</span>
+              </Grid>
+            </Grid>
+          )
         })}
       </Grid>
     </div>
