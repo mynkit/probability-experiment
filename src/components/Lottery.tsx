@@ -8,7 +8,7 @@ import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import PlayDisabledIcon from '@mui/icons-material/PlayDisabled';
 import { shuffle, range, arrayPlus } from '../utils/arrayFunc';
 
-const Lottery = () => {
+const Lottery: React.FC = () => {
   const [personCount, setPersonCount] = useState(5);
   const [persons, setPersons] = useState<number[]>(range(1, personCount+1));
   const [kujiCount, setKujiCount] = useState(8);
