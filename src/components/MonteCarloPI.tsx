@@ -126,7 +126,7 @@ const MonteCarloPI: React.FC = () => {
             return ind<points.length-1 ? (
               <Point key={ind} top={p.x*squareWidth - squareWidth/400} left={p.y*squareWidth - squareWidth/400} width={squareWidth/400} color='black'/>
             ) : (
-              <Point key={ind} top={p.x*squareWidth - squareWidth/100} left={p.y*squareWidth - squareWidth/100} width={squareWidth/100} color='red'/>
+              <Point key={ind} top={p.x*squareWidth - squareWidth/200} left={p.y*squareWidth - squareWidth/200} width={squareWidth/100} color='red'/>
             )
           })}
         </div>
