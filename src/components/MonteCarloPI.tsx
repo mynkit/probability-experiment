@@ -117,7 +117,7 @@ const MonteCarloPI: React.FC = () => {
       </Grid>
       <div style={{paddingTop: '10px'}}/>
         <Button id='addpoint' style={{zIndex: 100}} color={"inherit"} variant="outlined" onClick={()=>{addPoint()}} disabled={false} size="medium">
-          点を配置
+          点をランダム配置
         </Button>
       <div style={{paddingTop: '10px'}}/>
       <div id='square' style={{position: 'relative', border: '1px solid black', width: '700px', height: squareWidth, maxWidth: '100%', maxHeight: squareWidth}}>
