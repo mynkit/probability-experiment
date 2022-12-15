@@ -107,6 +107,13 @@ const Sidebar: React.FC<SidebarProps> = ({ target, setTarget }) => {
       >
         くじ引き
       </a>
+      <a className="menu-item"
+        onClick={()=>{selectMenu('montecarlo')}}
+        onKeyDown={(e)=>{if (e.key === 'Enter') selectMenu('montecarlo')}}
+        style={target==='montecarlo' ? {textDecoration: 'underline'} : {textDecoration: ''}}
+      >
+        モンテカルロ法円周率
+      </a>
     </Menu>
   )
 }
